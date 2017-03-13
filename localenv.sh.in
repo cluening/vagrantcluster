@@ -1,0 +1,4 @@
+# If you need to set local environment variables, like proxies, you can
+# put them in here for use in the provision script
+export http_proxy="http://proxy.example.com:8080"
+export https_proxy="http://proxy.example.com:8080"

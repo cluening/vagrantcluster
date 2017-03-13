@@ -1,0 +1,11 @@
+---
+- name: restart slurmd
+  service: name=slurmd state=restarted
+  when: "'compute' in group_names"
+
+- name: restart slurmctld
+  service: name=slurmctld state=restarted
+  when: "'master' in group_names"
+
+- name: restart munge
+  service: name=munge state=restarted

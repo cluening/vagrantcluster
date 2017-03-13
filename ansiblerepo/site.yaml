@@ -1,0 +1,4 @@
+---
+- include: master.yaml
+- include: fe.yaml
+- include: compute.yaml

@@ -1,0 +1,12 @@
+- name: home mount
+  mount:
+    name: /home
+    src: fe1:/home
+    fstype: nfs4
+    state: mounted
+
+- name: seboolean nfs home dirs
+  seboolean:
+    name: use_nfs_home_dirs
+    state: yes
+    persistent: yes

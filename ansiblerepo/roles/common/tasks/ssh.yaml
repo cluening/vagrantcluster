@@ -1,0 +1,44 @@
+---
+- name: shosts file
+  copy: src=root/.shosts dest=/root/.shosts seuser=unconfined_u serole=object_r setype=ssh_home_t selevel=s0
+  when: "('compute' in group_names) or 
+         ('fe' in group_names)"
+
+- name: ssh config file
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_config dest=/etc/ssh/ssh_config owner=root group=root mode=0644
+
+- name: sshd config file
+  copy: src=etc/ssh.{{ sshgroup }}/sshd_config dest=/etc/ssh/sshd_config owner=root group=root mode=0600
+  notify:
+   - restart sshd
+
+- name: ssh known hosts file
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_known_hosts dest=/etc/ssh/ssh_known_hosts owner=root group=root mode=0644
+
+# Note: errors are ignored on all of the following since we don't know exactly
+# which keys were succesfully generated.  This is a horrible hack that could
+# result in a broken configuration
+
+- name: ssh host ecdsa private key
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_host_ecdsa_key dest=/etc/ssh/ssh_host_ecdsa_key owner=root group=ssh_keys mode=0640
+  ignore_errors: True
+
+- name: ssh host ecdsa public key
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_host_ecdsa_key.pub dest=/etc/ssh/ssh_host_ecdsa_key.pub owner=root group=root mode=0644
+  ignore_errors: True
+
+- name: ssh host ed25519 private key
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_host_ed25519_key dest=/etc/ssh/ssh_host_ed25519_key owner=root group=ssh_keys mode=0640
+  ignore_errors: True
+
+- name: ssh host ed25519 public key
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_host_ed25519_key.pub dest=/etc/ssh/ssh_host_ed25519_key.pub owner=root group=root mode=0644
+  ignore_errors: True
+
+- name: ssh host rsa private key
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_host_rsa_key dest=/etc/ssh/ssh_host_rsa_key owner=root group=ssh_keys mode=0640
+  ignore_errors: True
+
+- name: ssh host rsa public key
+  copy: src=etc/ssh.{{ sshgroup }}/ssh_host_rsa_key.pub dest=/etc/ssh/ssh_host_rsa_key.pub owner=root group=root mode=0644
+  ignore_errors: True

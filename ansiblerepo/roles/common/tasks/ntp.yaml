@@ -1,0 +1,13 @@
+---
+- name: ntp package
+  yum:
+    name: ntp
+    state: present
+
+- name: ntpd service
+  service: name=ntpd state=started enabled=yes
+
+- name: ntp config file
+  copy: src=etc/ntp.conf.{{ sshgroup }} dest=/etc/ntp.conf
+  notify:
+    - restart ntpd

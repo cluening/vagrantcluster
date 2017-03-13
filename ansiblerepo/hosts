@@ -1,0 +1,17 @@
+[master]
+master	ansible_connection=local
+
+[master:vars]
+sshgroup=master
+
+[fe]
+fe1
+
+[fe:vars]
+sshgroup=fe
+
+[compute]
+node[01:04]
+
+[compute:vars]
+sshgroup=compute

@@ -1,0 +1,8 @@
+---
+- name: exports file
+  copy: src=etc/exports dest=/etc/exports
+  notify:
+   - restart nfs
+
+- name: nfs service
+  service: name=nfs state=started enabled=yes
