@@ -1,0 +1,8 @@
+---
+- name: clustershell package
+  yum:
+    name: "clustershell-ohpc"
+    state: present
+
+- name: clustershell config file
+  copy: src=etc/clustershell/groups.d/local.cfg dest=/etc/clustershell/groups.d/local.cfg

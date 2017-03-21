@@ -2,6 +2,11 @@
 - include: ssh.yaml
 - include: ntp.yaml
 
+- name: modulefiles package
+  yum:
+    name: "lmod-ohpc"
+    state: present
+
 - name: mountain timezone
   timezone:
     name: America/Denver
