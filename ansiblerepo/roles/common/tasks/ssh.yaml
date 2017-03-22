@@ -15,6 +15,10 @@
 - name: ssh known hosts file
   copy: src=etc/ssh.{{ sshgroup }}/ssh_known_hosts dest=/etc/ssh/ssh_known_hosts owner=root group=root mode=0644
 
+- name: shosts.equiv file
+  copy: src=etc/ssh.{{ sshgroup }}/shosts.equiv dest=/etc/ssh/shosts.equiv owner=root group=root mode=0644
+  when: "'compute' in group_names"
+
 # Note: errors are ignored on all of the following since we don't know exactly
 # which keys were succesfully generated.  This is a horrible hack that could
 # result in a broken configuration
