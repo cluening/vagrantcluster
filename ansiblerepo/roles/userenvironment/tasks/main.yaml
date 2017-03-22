@@ -1,0 +1,25 @@
+---
+- name: OpenHPC base package
+  yum:
+    name: "@ohpc-base"
+    state: present
+
+- name: glibc-devel package
+  yum:
+    name: "glibc-devel"
+    state: present
+
+- name: gnu compiler package
+  yum:
+    name: "gnu-compilers-ohpc"
+    state: present
+
+- name: gnu openmpi package
+  yum:
+    name: "openmpi-gnu-ohpc"
+    state: present
+
+- name: default environment package
+  yum:
+    name: "lmod-defaults-gnu-openmpi-ohpc"
+    state: present
