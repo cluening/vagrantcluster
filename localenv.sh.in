@@ -1,4 +1,5 @@
-# If you need to set local environment variables, like proxies, you can
-# put them in here for use in the provision script
+# If you need to set local environment variables, like proxies, when
+# initially provisioning, you can copy this to 'localenv.sh' and include
+# them here
 export http_proxy="http://proxy.example.com:8080"
 export https_proxy="http://proxy.example.com:8080"
