@@ -9,7 +9,6 @@ HOSTcompute="node*,192.168.100.1*"
 HOSTfe="fe1,192.168.100.3"
 HOSTmaster="master,192.168.100.2"
 ETCDIR="ansiblerepo/roles/common/files/etc/"
-ETCDIR="/tmp/ssh/"
 KEYLIST="ecdsa ed25519 rsa"
 
 # Check that ETCDIR actually exists
