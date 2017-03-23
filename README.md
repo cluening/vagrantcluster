@@ -12,7 +12,7 @@ Getting Started
 1. (Optional) Copy `localenv.sh.in` to `localenv.sh` and populate it with any local environment variables you need during the vagrant provisioning step (HTTP proxy information, for example)
 1. Run `vagrant up` to fire up the cluster
 1. Once the cluster is booted, you can run `vagrant ssh master` to log in to the master node, or `vagrant ssh fe1` to log in to the frontend
-1. Start using your cluster!  Check on your compute nodes by running `sinfo` on the master or the frontend node (you may need to set their state to `RESUME` after first booting), run some simple jobs, and explore the ansibl repository to see how everything is configured
+1. Start using your cluster!  Check on your compute nodes by running `sinfo` on the master or the frontend node (you may need to set their state to `RESUME` after first booting), run some simple jobs, and explore the ansible repository to see how everything is configured
 
 A note on security
 ------------------
