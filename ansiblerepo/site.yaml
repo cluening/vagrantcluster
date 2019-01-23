@@ -1,4 +1,4 @@
 ---
-- include: master.yaml
-- include: fe.yaml
-- include: compute.yaml
+- import_playbook: master.yaml
+- import_playbook: fe.yaml
+- import_playbook: compute.yaml
