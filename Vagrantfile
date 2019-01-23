@@ -112,7 +112,7 @@ Vagrant.configure("2") do |config|
     if [ -f /vagrant/localenv.sh ]; then
       . /vagrant/localenv.sh
     fi
-    yum install -y https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-centos7.2-1.2-1.x86_64.rpm
+    yum install -y https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm
     yum install -y ansible
 
     ansible-playbook -c local -i /vagrant/ansiblerepo/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
