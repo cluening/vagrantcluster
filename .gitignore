@@ -1,3 +1,4 @@
+.vagrant
 localenv.sh
 ansiblerepo/roles/common/files/etc/ssh.*/ssh_host_*_key
 ansiblerepo/roles/common/files/etc/ssh.*/ssh_host_*_key.pub
