@@ -19,3 +19,5 @@
 - name: hosts file
   copy: src=etc/hosts dest=/etc/hosts
 
+- name: user namespace sysctl
+  copy: src=etc/sysctl.d/usernamespaces.conf dest=/etc/sysctl.d/usernamespaces.conf
