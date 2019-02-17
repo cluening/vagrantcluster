@@ -16,12 +16,12 @@
 
 - name: gnu openmpi package
   yum:
-    name: "openmpi-gnu-ohpc"
+    name: "openmpi3-pmix-slurm-gnu7-ohpc"
     state: present
 
 - name: default environment package
   yum:
-    name: "lmod-defaults-gnu-openmpi-ohpc"
+    name: "lmod-defaults-gnu7-openmpi3-ohpc.noarch"
     state: present
 
 - name: openmpi mca config variables
