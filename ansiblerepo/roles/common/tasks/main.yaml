@@ -16,6 +16,11 @@
     name: libsemanage-python
     state: present
 
+- name: git package
+  yum:
+    name: "git"
+    state: present
+
 - name: hosts file
   copy: src=etc/hosts dest=/etc/hosts
 

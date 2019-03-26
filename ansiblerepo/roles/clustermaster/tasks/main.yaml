@@ -6,3 +6,8 @@
 
 - name: clustershell config file
   copy: src=etc/clustershell/groups.d/local.cfg dest=/etc/clustershell/groups.d/local.cfg
+
+- name: pdsh package
+  yum:
+    name: "pdsh"
+    state: present
