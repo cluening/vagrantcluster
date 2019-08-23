@@ -3,4 +3,5 @@
   roles:
     - common
     - clustermaster
+    - pxe-server
     - slurm

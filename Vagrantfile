@@ -42,6 +42,19 @@ Vagrant.configure("2") do |config|
     node02.vm.box = "centos/7"
     node02.vm.hostname = "node02"
     node02.vm.network :private_network, ip: "192.168.100.102"
+
+    node02.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.gui = true
+      v.customize [
+        'modifyvm', :id,
+        '--nicbootprio2', '1',
+        '--boot1', 'net',
+        '--boot2', 'none',
+        '--boot3', 'none',
+        '--boot4', 'none'
+      ]
+    end
   end
 
   config.vm.define "node03" do |node03|
