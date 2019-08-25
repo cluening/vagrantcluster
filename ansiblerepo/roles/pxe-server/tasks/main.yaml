@@ -13,12 +13,20 @@
 # ~~mkdir /tftpboot/pxelinux/files/pxelinux.cfg/~~
 # ~~Fix up /tftpboot/pxelinux/files/pxelinux.cfg/default~~
 # ~~yum install dracut-network~~
+# populate /etc/exports
+# - add rootfs directory automatically
+# systemctl start nfs
 # cp /boot/vmlinuz-3.10.0-957.1.3.el7.x86_64 /tftpboot/pxelinux/files/
 #  - Actually, need to copy the right one from the image
 #  - maybe need an "images.yaml" or "images" role or something
 # dracut -a "nfs network base" -f initrd.img
-# populate /etc/exports
-# systemctl start nfs
+#
+# More generic image management:
+# mkdir /images
+#
+# Image build:
+# yum group install minimal --installroot=/images/centos7/rootfs --releasever=7
+# yum install --installroot=/images/centos7/rootfs rpcbind nfs-utils
 # add a root password to image
 # disable selinux in image
 
