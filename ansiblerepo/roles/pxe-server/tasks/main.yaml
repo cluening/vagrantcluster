@@ -12,9 +12,10 @@
 #   - Edit the /etc/selinux/config file to set the  SELINUX parameter to  disabled,
 # ~~mkdir /tftpboot/pxelinux/files/pxelinux.cfg/~~
 # ~~Fix up /tftpboot/pxelinux/files/pxelinux.cfg/default~~
+# Generate /tftpboot/.../default (or others) file with template
+#  - Perhaps a "compute" file with MAC or IP links to it
 # ~~yum install dracut-network~~
-# populate /etc/exports
-# - add rootfs directory automatically
+# ~~populate /etc/exports~~
 # systemctl start nfs
 # cp /boot/vmlinuz-3.10.0-957.1.3.el7.x86_64 /tftpboot/pxelinux/files/
 #  - Actually, need to copy the right one from the image
@@ -49,7 +50,7 @@
     enabled: "yes"
 
 - name: "dnsmasq config file"
-  copy: 
+  template: 
     src: "dnsmasq.conf"
     dest: "/etc/dnsmasq.conf"
 
@@ -68,7 +69,7 @@
     group: "nobody"
     
 - name: "pxelinux.cfg/default file"
-  copy:
+  template:
     src: "default"
     dest: "/tftpboot/pxelinux/files/pxelinux.cfg/default"
     owner: "nobody"

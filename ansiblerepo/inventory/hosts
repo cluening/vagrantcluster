@@ -1,3 +1,8 @@
+[vagrantcluster]
+master
+fe1
+node[01:04]
+
 [master]
 master	ansible_connection=local
 
@@ -7,6 +12,7 @@ sshgroup=master
 [fe]
 fe1
 
+# FIXME: move these variables out of here
 [fe:vars]
 sshgroup=fe
 
