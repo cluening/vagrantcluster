@@ -1,0 +1,2 @@
+nfs_exports:
+ - "/home   node*(rw,no_root_squash)"

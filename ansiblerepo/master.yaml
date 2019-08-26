@@ -3,5 +3,6 @@
   roles:
     - common
     - clustermaster
+    - nfs-server
     - pxe-server
     - slurm

@@ -1,1 +1,4 @@
 cluster_image_directory: "/images"
+
+nfs_exports:
+ - /images/   *(ro,no_root_squash,insecure)
