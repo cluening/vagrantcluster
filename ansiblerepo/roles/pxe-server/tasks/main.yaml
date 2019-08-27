@@ -16,7 +16,7 @@
 #  - Perhaps a "compute" file with MAC or IP links to it
 # ~~yum install dracut-network~~
 # ~~populate /etc/exports~~
-# systemctl start nfs
+# ~~systemctl start nfs~~
 # cp /boot/vmlinuz-3.10.0-957.1.3.el7.x86_64 /tftpboot/pxelinux/files/
 #  - Actually, need to copy the right one from the image
 #  - maybe need an "images.yaml" or "images" role or something
