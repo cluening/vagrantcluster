@@ -5,4 +5,4 @@ MENU TITLE Theseus Boot
 LABEL centos7overlay
 MENU LABEL CentOS Overlay
 KERNEL vmlinuz
-APPEND initrd=initrd.img root=nfs:192.168.100.2:/{{ cluster_image_directory }}/{{ cluster_os_name }}-{{ cluster_os_version }}/rootfs:vers=3,nolock overlaysize=500m
+APPEND initrd=initrd.img root=nfs:{{ cluster_image_server }}:/{{ cluster_image_directory }}/{{ cluster_os_name }}-{{ cluster_os_version }}/rootfs:vers=3,nolock overlaysize=500m

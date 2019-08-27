@@ -1,4 +1,31 @@
 cluster_os_name: "centos"
 cluster_os_version: "7.6.1810"
 
+cluster_image_server: "192.168.100.2"
 cluster_image_directory: "/images"
+
+cluster_compute_nodes:
+  node01:
+    ip: "192.168.100.101"
+    mac: ""
+    hsn_ip: ""
+    bmc_ip: ""
+    bmc_mac: ""
+  node02:
+    ip: "192.168.100.102"
+    mac: ""
+    hsn_ip: ""
+    bmc_ip: ""
+    bmc_mac: ""
+  node03:
+    ip: "192.168.100.103"
+    mac: ""
+    hsn_ip: ""
+    bmc_ip: ""
+    bmc_mac: ""
+  node04:
+    ip: "192.168.100.104"
+    mac: ""
+    hsn_ip: ""
+    bmc_ip: ""
+    bmc_mac: ""

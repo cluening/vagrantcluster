@@ -4,7 +4,7 @@
 # ~~systemctl enable dnsmasq~~
 # ~~systemctl start dnsmasq~~
 # ~~update /etc/dnsmasq.conf~~
-# yum install syslinux  # for /usr/share/syslinux/pxelinux.0
+# ~~yum install syslinux  # for /usr/share/syslinux/pxelinux.0~~
 # ~~mkdir -p /tftpboot/pxelinux/files~~
 # ~~cp /usr/share/syslinux/pxelinux.0 /tftpboot/pxelinux/files/~~
 # disable selinux (breaks /tftpboot access)
@@ -24,6 +24,7 @@
 #
 # More generic image management:
 # mkdir /images
+#  - actually, mkdir /{{ cluster_image_directory }}
 #
 # Image build:
 # yum group install minimal --installroot=/images/centos7/rootfs --releasever=7
