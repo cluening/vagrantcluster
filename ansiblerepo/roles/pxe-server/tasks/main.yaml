@@ -23,8 +23,8 @@
 # dracut -a "nfs network base" -f initrd.img
 #
 # More generic image management:
-# mkdir /images
-#  - actually, mkdir /{{ cluster_image_directory }}
+# ~~mkdir /images~~
+# ~~ - actually, mkdir /{{ cluster_image_directory }}~~
 #
 # Image build:
 # yum group install minimal --installroot=/images/centos7/rootfs --releasever=7
@@ -82,3 +82,5 @@
   yum:
     name: "dracut-network"
     state: "present"
+    
+- include: imagebuild.yaml

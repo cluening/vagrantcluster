@@ -1,0 +1,8 @@
+---
+- name: "Create the root image directory"
+  file:
+    state: "directory"
+    path: "/{{ cluster_image_directory }}"
+    owner: "root"
+    group: "root"
+    
