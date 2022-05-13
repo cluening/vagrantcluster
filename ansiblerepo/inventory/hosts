@@ -1,8 +1,8 @@
-[master]
-master	ansible_connection=local
+[head]
+head	ansible_connection=local
 
-[master:vars]
-sshgroup=master
+[head:vars]
+sshgroup=head
 
 [fe]
 fe1

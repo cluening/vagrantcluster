@@ -1,4 +1,4 @@
 ---
-- import_playbook: master.yaml
+- import_playbook: head.yaml
 - import_playbook: fe.yaml
 - import_playbook: compute.yaml

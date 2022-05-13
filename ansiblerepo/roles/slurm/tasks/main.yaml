@@ -10,7 +10,7 @@
   yum:
     name: "ohpc-slurm-server"
     state: present
-  when: "'master' in group_names"
+  when: "'head' in group_names"
 
 - name: slurm user
   user:
@@ -43,4 +43,4 @@
 
 - name: Slurm Control Service
   service: name=slurmctld state=started enabled=yes
-  when: "'master' in group_names"
+  when: "'head' in group_names"

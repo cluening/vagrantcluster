@@ -1,6 +1,6 @@
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.56.2	master
+192.168.56.2	head
 192.168.56.3	fe1
 192.168.56.101	node01
 192.168.56.102	node02

@@ -20,10 +20,10 @@ Vagrant.configure("2") do |config|
   # each host.  But don't use it in production!
   config.ssh.insert_key = false
 
-  config.vm.define "master" do |master|
-    master.vm.box = "centos/7"
-    master.vm.hostname = "master"
-    master.vm.network :private_network, ip: "192.168.56.2"
+  config.vm.define "head" do |head|
+    head.vm.box = "centos/7"
+    head.vm.hostname = "head"
+    head.vm.network :private_network, ip: "192.168.56.2"
   end
 
   config.vm.define "fe1" do |fe1|
