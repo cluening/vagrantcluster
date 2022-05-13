@@ -1,8 +1,8 @@
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.100.2	master
-192.168.100.3	fe1
-192.168.100.101	node01
-192.168.100.102	node02
-192.168.100.103	node03
-192.168.100.104	node04
+192.168.56.2	master
+192.168.56.3	fe1
+192.168.56.101	node01
+192.168.56.102	node02
+192.168.56.103	node03
+192.168.56.104	node04

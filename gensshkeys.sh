@@ -5,9 +5,9 @@
 #  - Add --class option
 
 CLASSLIST="compute fe master"
-HOSTcompute="node*,192.168.100.1*"
-HOSTfe="fe1,192.168.100.3"
-HOSTmaster="master,192.168.100.2"
+HOSTcompute="node*,192.168.56.1*"
+HOSTfe="fe1,192.168.56.3"
+HOSTmaster="master,192.168.56.2"
 ETCDIR="ansiblerepo/roles/common/files/etc/"
 KEYLIST="ecdsa ed25519 rsa"
 

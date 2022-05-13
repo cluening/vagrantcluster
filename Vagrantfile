@@ -23,37 +23,37 @@ Vagrant.configure("2") do |config|
   config.vm.define "master" do |master|
     master.vm.box = "centos/7"
     master.vm.hostname = "master"
-    master.vm.network :private_network, ip: "192.168.100.2"
+    master.vm.network :private_network, ip: "192.168.56.2"
   end
 
   config.vm.define "fe1" do |fe1|
     fe1.vm.box = "centos/7"
     fe1.vm.hostname = "fe1"
-    fe1.vm.network :private_network, ip: "192.168.100.3"
+    fe1.vm.network :private_network, ip: "192.168.56.3"
   end
 
   config.vm.define "node01" do |node01|
     node01.vm.box = "centos/7"
     node01.vm.hostname = "node01"
-    node01.vm.network :private_network, ip: "192.168.100.101"
+    node01.vm.network :private_network, ip: "192.168.56.101"
   end
 
   config.vm.define "node02" do |node02|
     node02.vm.box = "centos/7"
     node02.vm.hostname = "node02"
-    node02.vm.network :private_network, ip: "192.168.100.102"
+    node02.vm.network :private_network, ip: "192.168.56.102"
   end
 
   config.vm.define "node03" do |node03|
     node03.vm.box = "centos/7"
     node03.vm.hostname = "node03"
-    node03.vm.network :private_network, ip: "192.168.100.103"
+    node03.vm.network :private_network, ip: "192.168.56.103"
   end
 
   config.vm.define "node04" do |node04|
     node04.vm.box = "centos/7"
     node04.vm.hostname = "node04"
-    node04.vm.network :private_network, ip: "192.168.100.104"
+    node04.vm.network :private_network, ip: "192.168.56.104"
   end
 
   # Disable automatic box update checking. If you disable this, then
