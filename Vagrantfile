@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
 
   config.vm.define "head" do |head|
-    head.vm.box = "centos/7"
+    head.vm.box = "fedora/36-cloud-base"
     head.vm.hostname = "head"
     head.vm.network :private_network, ip: "192.168.56.2"
   end
@@ -33,19 +33,23 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "node01" do |node01|
-    node01.vm.box = "centos/7"
+    node01.vm.box = "fedora/36-cloud-base"
     node01.vm.hostname = "node01"
     node01.vm.network :private_network, ip: "192.168.56.101"
   end
 
   config.vm.define "node02" do |node02|
-    node02.vm.box = "centos/7"
+    #node02.vm.box = "centos/7"
+    #node02.vm.box = "generic/centos8"
+    node02.vm.box = "fedora/36-cloud-base"
     node02.vm.hostname = "node02"
+    #node02.vm.network :private_network, ip: "192.168.56.102", mac: "aabbccccbbaa"
+    #node02.vm.network :private_network, ip: "192.168.56.102", virtualbox__intnet: true
     node02.vm.network :private_network, ip: "192.168.56.102"
   end
 
   config.vm.define "node03" do |node03|
-    node03.vm.box = "centos/7"
+    node03.vm.box = "fedora/36-cloud-base"
     node03.vm.hostname = "node03"
     node03.vm.network :private_network, ip: "192.168.56.103"
   end
@@ -98,6 +102,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    #vb.customize ["modifyvm", :id, "--nictype1", "Am79C973"]
+    #vb.customize ["modifyvm", :id, "--nictype2", "Am79C973"]
   end
 
   # Enable provisioning with a shell script. Additional provisioners such as
@@ -108,14 +114,14 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
 
-  config.vm.provision "shell", inline: <<-SHELL
-    if [ -f /vagrant/localenv.sh ]; then
-      . /vagrant/localenv.sh
-    fi
-    yum install -y https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm
-    yum install -y ansible
-
-    ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
-  SHELL
+#  config.vm.provision "shell", inline: <<-SHELL
+#    if [ -f /vagrant/localenv.sh ]; then
+#      . /vagrant/localenv.sh
+#    fi
+#    yum install -y https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm
+#    yum install -y ansible
+#
+#    ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
+#  SHELL
 
 end
