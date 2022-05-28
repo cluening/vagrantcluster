@@ -199,6 +199,49 @@ int kill_job_container(char *containername){
 }
 
 
+int delete_job_container(char *containername){
+  CURLcode ret;
+  CURL *hnd;
+  long responsecode;
+  char *url;
+  size_t urllength;
+
+  char urltemplate[] = "http://localhost/v4.0.0/libpod/containers/%s";
+
+  urllength = snprintf(NULL, 0, urltemplate, containername);
+  url = malloc((urllength + 1) * sizeof(char));
+  sprintf(url, urltemplate, containername);
+
+  hnd = curl_easy_init();
+  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+  curl_easy_setopt(hnd, CURLOPT_URL, url);
+  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
+  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.82.0");
+  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
+  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
+  curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "DELETE");
+  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
+  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
+  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
+
+  ret = curl_easy_perform(hnd);
+
+  curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
+  if(responsecode == 200){
+    printf("Deleted successfully\n");
+  } else {
+    printf("Failed to delete.  Response code: %d\n", responsecode);
+  }
+
+  curl_easy_cleanup(hnd);
+  hnd = NULL;
+
+  free(url);
+
+  return (int)ret;
+}
+
+
 int get_container_list()
 {
   CURLcode ret;
@@ -259,4 +302,6 @@ int main(int argc, char *argv[]){
   start_job_container(containername);
   wait_job_container(containername, "running");
   kill_job_container(containername);
+  wait_job_container(containername, "exited");
+  delete_job_container(containername);
 }
