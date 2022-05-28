@@ -7,13 +7,18 @@
 #include <curl/curl.h>
 
 
-/*
-[root@node01 src]# curl -i -s -X POST -H "Content-Type: application/json" --unix
--socket /run/layercake/podman.sock 'http://h/v1.24/libpod/containers/create' -d 
-'{ "image": "jobcontainer", "pod": "lc01", "name": "curljobcontainer", "mounts":
- [ {"Source": "/run/layercake", "Destination": "/run/layercake", "Type": "bind" 
-} ] }'  
-*/
+void prepare_curl_handle(CURL *hnd){
+  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
+  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.82.0");
+  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
+  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
+  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
+  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
+  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
+}
+
+
 int create_job_container(char *imagename, char *podname, char *containername){
   CURLcode ret;
   CURL *hnd;
@@ -36,19 +41,12 @@ int create_job_container(char *imagename, char *podname, char *containername){
   slist1 = curl_slist_append(slist1, "Content-Type: application/json");
 
   hnd = curl_easy_init();
+  prepare_curl_handle(hnd);
   curl_easy_setopt(hnd, CURLOPT_URL, "http://localhost/v4.0.0/libpod/containers/create");
-  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
   curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, createjson);
   curl_easy_setopt(hnd, CURLOPT_POSTFIELDSIZE_LARGE, (curl_off_t)strlen(createjson));
   curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, slist1);
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
-  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
-  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.82.0");
-  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
-  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
-  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
 
   ret = curl_easy_perform(hnd);
 
@@ -84,16 +82,9 @@ int start_job_container(char *containername) {
   sprintf(url, urltemplate, containername);
 
   hnd = curl_easy_init();
-  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+  prepare_curl_handle(hnd);
   curl_easy_setopt(hnd, CURLOPT_URL, url);
-  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.82.0");
-  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
-  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
-  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
-  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
 
   ret = curl_easy_perform(hnd);
 
@@ -127,16 +118,9 @@ int wait_job_container(char *containername, char *containerstate){
   sprintf(url, urltemplate, containername, containerstate);
 
   hnd = curl_easy_init();
-  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+  prepare_curl_handle(hnd);
   curl_easy_setopt(hnd, CURLOPT_URL, url);
-  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.82.0");
-  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
-  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
-  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
-  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
 
   ret = curl_easy_perform(hnd);
 
@@ -170,16 +154,9 @@ int kill_job_container(char *containername){
   sprintf(url, urltemplate, containername);
 
   hnd = curl_easy_init();
-  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+  prepare_curl_handle(hnd);
   curl_easy_setopt(hnd, CURLOPT_URL, url);
-  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.82.0");
-  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
-  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
-  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
-  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
 
   ret = curl_easy_perform(hnd);
 
@@ -213,16 +190,9 @@ int delete_job_container(char *containername){
   sprintf(url, urltemplate, containername);
 
   hnd = curl_easy_init();
-  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+  prepare_curl_handle(hnd);
   curl_easy_setopt(hnd, CURLOPT_URL, url);
-  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.82.0");
-  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "DELETE");
-  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
-  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
-  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
 
   ret = curl_easy_perform(hnd);
 
@@ -248,15 +218,8 @@ int get_container_list()
   CURL *hnd;
 
   hnd = curl_easy_init();
+  prepare_curl_handle(hnd);
   curl_easy_setopt(hnd, CURLOPT_URL, "http://localhost/v4.0.0/libpod/containers/json");
-  curl_easy_setopt(hnd, CURLOPT_UNIX_SOCKET_PATH, "/run/layercake/podman.sock");
-  curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
-  curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-  curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/7.81.0");
-  curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
-  curl_easy_setopt(hnd, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
-  curl_easy_setopt(hnd, CURLOPT_FTP_SKIP_PASV_IP, 1L);
-  curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
 
 
   /* Here is a list of options the curl code used that cannot get generated
