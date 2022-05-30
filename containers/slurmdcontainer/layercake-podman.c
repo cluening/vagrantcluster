@@ -5,12 +5,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
 #include <slurm/spank.h>
+#include "podman.h"
+
 
 SPANK_PLUGIN(layercake-podman, 1)
 
-pid_t get_job_container_pid(){
+
+pid_t _get_job_container_pid(){
   pid_t pid;
   FILE *fp;
 
@@ -32,21 +34,45 @@ int slurm_spank_init(spank_t sp, int ac, char **av){
 
 
 int slurm_spank_task_init(spank_t sp, int ac, char **av){
-  slurm_info("in slurm_spank_task_init");
-
   int filedescriptor, result;
-  pid_t processid = get_job_container_pid();
+  pid_t processid;
   char mntnspath[255];
 
-  printf("Here goes!\n");
+  char imagename[] = "jobcontainer";
+  char podname[] = "lc01";
+  char containername[] = "libcurljobcontainer";
+
+  slurm_info("in slurm_spank_task_init");
+
+  _create_job_container(imagename, podname, containername);
+  _start_job_container(containername);
+  _wait_job_container(containername, "running");
+ 
+  // FIXME: there's a race condition here between the container entering "running" state and the pid file actually getting written out
+  sleep(2);
+
+  processid = _get_job_container_pid();
 
   snprintf(mntnspath, 255, "/proc/%d/ns/mnt", processid);
-
   filedescriptor = open(mntnspath, O_RDONLY);
-
   result = setns(filedescriptor, 0);
 
-  printf("Result: %d\n", result);
+  slurm_info("setns result: %d\n", result);
 
   return 0;
+}
+
+
+int slurm_spank_exit(spank_t sp, int ac, char **av){
+  char imagename[] = "jobcontainer";
+  char podname[] = "lc01";
+  char containername[] = "libcurljobcontainer";
+
+  slurm_info("in slurm_spank_exit");
+
+  _kill_job_container(containername);
+  _wait_job_container(containername, "exited");
+  _delete_job_container(containername);
+
+  slurm_info("job container cleaned up");
 }
