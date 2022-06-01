@@ -1,7 +1,9 @@
 ---
 - hosts: compute
   roles:
-    - common
-    - slurm
-    - nfs-client
-    - userenvironment
+    - base
+    - networking
+    #- common
+    #- slurm
+    #- nfs-client
+    #- userenvironment

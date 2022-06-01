@@ -1,0 +1,7 @@
+global_netconfig:
+  cvlan:
+    conn_name: "Wired connection 2"
+    device: eth1
+    network: "192.168.56.0/21"
+    fe_offset: 19
+    compute_offset: 100

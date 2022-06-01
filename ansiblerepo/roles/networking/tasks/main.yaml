@@ -1,0 +1,18 @@
+---
+- name: Add cvlan ip4 address
+  community.general.nmcli:
+    conn_name: "Wired connection 2"
+    ifname: '{{ netconfig["cvlan"]["device"] }}'
+    type: ethernet
+    ip4:
+      - '{{ netconfig["cvlan"]["ipv4_address"] }}/24'
+    state: present
+  register: nmcli_result
+
+- name: Bring down cvlan network interface
+  ansible.builtin.command: nmcli con down "Wired connection 2"
+  when: nmcli_result.changed
+
+- name: Bring up cvlan network interface
+  ansible.builtin.command: nmcli con up "Wired connection 2"
+  when: nmcli_result.changed
