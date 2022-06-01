@@ -16,6 +16,45 @@ void _prepare_curl_handle(CURL *hnd){
 }
 
 
+int _pull_job_container(char *imagename) {
+  CURLcode ret;
+  CURL *hnd;
+  long responsecode;
+  char *url;
+  size_t urllength;
+
+  // FIXME: clean up the `tlsVerify` parameter once a real registry is working
+  char urltemplate[] = "http://localhost/v4.0.0/libpod/images/pull?tlsVerify=false&reference=%s";
+
+  urllength = snprintf(NULL, 0, urltemplate, imagename);
+  url = malloc((urllength + 1) * sizeof(char));
+  sprintf(url, urltemplate, imagename);
+
+  hnd = curl_easy_init();
+  _prepare_curl_handle(hnd);
+  curl_easy_setopt(hnd, CURLOPT_URL, url);
+  curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
+
+  slurm_info("Pulling image\n");
+
+  ret = curl_easy_perform(hnd);
+
+  curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
+  if(responsecode == 200){
+    slurm_info("Pulled successfully\n");
+  } else {
+    slurm_info("Failed to pull.  Response code: %d\n", responsecode);
+  }
+
+  curl_easy_cleanup(hnd);
+  hnd = NULL;
+
+  free(url);
+
+  return (int)ret;
+}
+
+
 int _create_job_container(char *imagename, char *podname, char *containername){
   CURLcode ret;
   CURL *hnd;

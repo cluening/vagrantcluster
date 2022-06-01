@@ -38,12 +38,13 @@ int slurm_spank_task_init(spank_t sp, int ac, char **av){
   pid_t processid;
   char mntnspath[255];
 
-  char imagename[] = "jobcontainer";
+  char imagename[] = "head:5000/jobcontainer:latest";
   char podname[] = "lc01";
   char containername[] = "libcurljobcontainer";
 
   slurm_info("in slurm_spank_task_init");
 
+  _pull_job_container(imagename);
   _create_job_container(imagename, podname, containername);
   _start_job_container(containername);
   _wait_job_container(containername, "running");
