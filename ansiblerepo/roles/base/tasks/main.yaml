@@ -1,0 +1,6 @@
+---
+- name: "Disable selinux"
+  selinux:
+    state: "disabled"
+  ignore_errors: "{{ ansible_check_mode }}"
+
