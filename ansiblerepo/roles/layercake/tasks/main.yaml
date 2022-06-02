@@ -23,7 +23,6 @@
     - "'cvlan' not in podman_network_result.stdout | from_json | json_query('[].name')"
 
 
-# podman pod create --name lc01 --share ipc,net,uts,pid --network cvlan -p 6818:6818 --ip 192.168.56.111
 - name: "Create the user pod"
   containers.podman.podman_pod:
     name: "lc{{ '%02d' | format(compute_node_number) }}"
