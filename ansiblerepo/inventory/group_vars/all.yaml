@@ -5,3 +5,4 @@ global_netconfig:
     network: "192.168.56.0/21"
     fe_offset: 19
     compute_offset: 100
+    compute_pod_offset: 110

@@ -1,2 +1,9 @@
+netconfig:
+  cvlan:
+    conn_name: '{{ global_netconfig["cvlan"]["conn_name"] }}'
+    device: '{{ global_netconfig["cvlan"]["device"] }}'
+    ipv4_address: '{{ global_netconfig["cvlan"]["network"] | ansible.utils.nthhost(global_netconfig["cvlan"]["compute_offset"] + compute_node_number) }}'
+    pod_ipv4_address: '{{ global_netconfig["cvlan"]["network"] | ansible.utils.nthhost(global_netconfig["cvlan"]["compute_pod_offset"] + compute_node_number) }}'
+
 compute_os_name: "centos"
 compute_os_version: "7.6.1810"

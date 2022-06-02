@@ -26,10 +26,10 @@
 # podman pod create --name lc01 --share ipc,net,uts,pid --network cvlan -p 6818:6818 --ip 192.168.56.111
 - name: "Create the user pod"
   containers.podman.podman_pod:
-    name: "lc02"  # FIXME: this needs to be dynamic
-    share: "ipc,uts,net,user,pid"
+    name: "lc{{ '%02d' | format(compute_node_number) }}"
+    share: "ipc,uts,net,pid"
     network: "cvlan"
     publish:
       - "6818:6818"
-    ip: "192.168.56.112"  # FIXME: this needs to be dynamic
+    ip: "{{ netconfig['cvlan']['pod_ipv4_address'] }}"
     state: started
