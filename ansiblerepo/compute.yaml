@@ -3,6 +3,7 @@
   roles:
     - base
     - networking
+    - layercake
     #- common
     #- slurm
     #- nfs-client

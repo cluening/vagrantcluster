@@ -1,0 +1,35 @@
+---
+- name: "Install podman packages"
+  ansible.builtin.dnf:
+    name:
+      - podman
+    state: present
+
+
+# The containers.podman.podman_network module can't handle "parent" as a key
+# in the "opt" dictionary, so creating the network needs to be done
+# manually for now
+- name: "Get existing podman network names"
+  ansible.builtin.command: "podman network ls --format=json"
+  changed_when: false
+  register: podman_network_result
+
+# FIXME: the parent and the subnet should both be variables
+- name: "Create cvlan podman network"
+  ansible.builtin.command: "podman network create -d macvlan -o parent=eth1 --subnet 192.168.56.0/24 cvlan"
+  changed_when: false
+  when:
+    - "not ansible_check_mode"
+    - "'cvlan' not in podman_network_result.stdout | from_json | json_query('[].name')"
+
+
+# podman pod create --name lc01 --share ipc,net,uts,pid --network cvlan -p 6818:6818 --ip 192.168.56.111
+- name: "Create the user pod"
+  containers.podman.podman_pod:
+    name: "lc02"  # FIXME: this needs to be dynamic
+    share: "ipc,uts,net,user,pid"
+    network: "cvlan"
+    publish:
+      - "6818:6818"
+    ip: "192.168.56.112"  # FIXME: this needs to be dynamic
+    state: started
