@@ -4,3 +4,11 @@
     state: "disabled"
   ignore_errors: "{{ ansible_check_mode }}"
 
+
+# FIXME: the IP address below should come from the head node's hostvars
+- name: Add head node aliases to /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      192.168.56.2    head slurm
+    marker: "# {mark} ANSIBLE MANAGED BLOCK head"

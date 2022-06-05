@@ -1,4 +1,5 @@
 #define _GNU_SOURCE
+#include <limits.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <sched.h>
@@ -37,15 +38,17 @@ int slurm_spank_task_init(spank_t sp, int ac, char **av){
   int filedescriptor, result;
   pid_t processid;
   char mntnspath[255];
+  char hostname[HOST_NAME_MAX];
 
   char imagename[] = "head:5000/jobcontainer:latest";
-  char podname[] = "lc01";
   char containername[] = "libcurljobcontainer";
 
   slurm_info("in slurm_spank_task_init");
 
+  gethostname(hostname, HOST_NAME_MAX);
+
   _pull_job_container(imagename);
-  _create_job_container(imagename, podname, containername);
+  _create_job_container(imagename, hostname, containername);
   _start_job_container(containername);
   _wait_job_container(containername, "running");
  
@@ -66,7 +69,6 @@ int slurm_spank_task_init(spank_t sp, int ac, char **av){
 
 int slurm_spank_exit(spank_t sp, int ac, char **av){
   char imagename[] = "jobcontainer";
-  char podname[] = "lc01";
   char containername[] = "libcurljobcontainer";
 
   slurm_info("in slurm_spank_exit");
@@ -76,4 +78,6 @@ int slurm_spank_exit(spank_t sp, int ac, char **av){
   _delete_job_container(containername);
 
   slurm_info("job container cleaned up");
+
+  return 0;
 }
