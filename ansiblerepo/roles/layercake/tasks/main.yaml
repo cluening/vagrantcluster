@@ -13,13 +13,25 @@
     mode: '0755'
 
 
-# FIXME: this directory creation should probably be done via systemd
-- name: "Create the layercake state directory"
-  ansible.builtin.file:
-    path: /run/layercake/
-    state: directory
-    mode: '0755'
+- name: "Create layercake unit file"
+  template:
+    src: layercake.service.j2
+    dest: /etc/systemd/system/layercake.service
+    owner: root
+    group: root
+    mode: 0644
+  register: layercake_result
 
+- name: "Reload systemd config"
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  when: layercake_result.changed
+
+- name: "Enable and start layercake service"
+  ansible.builtin.systemd:
+    name: layercake
+    state: started
+    enabled: yes
 
 - name: "Put registries config file in place"
   ansible.builtin.copy:
@@ -59,16 +71,25 @@
     - "'cvlan' not in podman_network_result.stdout | from_json | json_query('[].name')"
 
 
-- name: "Create the user pod"
-  containers.podman.podman_pod:
-    name: "lc{{ '%02d' | format(compute_node_number) }}"
-    share: "ipc,uts,net,pid"
-    network: "cvlan"
-    publish:
-      - "6818:6818"
-    ip: "{{ netconfig['cvlan']['pod_ipv4_address'] }}"
-    state: started
+- name: "Put user pod unit file in place"
+  template:
+    src: layercake-pod.service.j2
+    dest: /etc/systemd/system/layercake-pod.service
+    owner: root
+    group: root
+    mode: 0644
+  register: layercake_pod_result
 
+- name: "Reload systemd config"
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  when: layercake_pod_result.changed
+
+- name: "Enable and start user pod"
+  ansible.builtin.systemd:
+    name: layercake-pod
+    state: started
+    enabled: yes
 
 # The containers.podman.podman_secret module expects the secret data to be
 # a string, which doesn't work with a binary file.  So, creating the secret
@@ -86,11 +107,6 @@
   changed_when: false
   register: podman_secret_result
 
-- name: Debug
-  debug:
-    msg: "{{ podman_secret_result.stdout }}"
-  when: "'mungekey' not in podman_secret_result.stdout"
-
 - name: "Create munge key secret"
   ansible.builtin.command: "podman secret create mungekey /etc/layercake/munge.key"
   when: "'mungekey' not in podman_secret_result.stdout"
@@ -103,20 +119,14 @@
     state: directory
     mode: '0755'
 
-- name: "Create munged container"
-  containers.podman.podman_container:
-    name: munged
-    image: "head:5000/munged:latest"
-    pod: "lc{{ '%02d' | format(compute_node_number) }}"
-    ipc: shareable
-    secrets:
-     - mungekey
-    state: present
-    volumes:
-     - "/run/layercake/munge:/run/munge"
-    generate_systemd:
-      path: /etc/systemd/system
-      container_prefix: layercake
+
+- name: "Put munged container unit file in place"
+  template:
+    src: layercake-munged.service.j2
+    dest: /etc/systemd/system/layercake-munged.service
+    owner: root
+    group: root
+    mode: 0644
   register: munged_container_result
 
 - name: "Reload systemd config"
@@ -131,21 +141,13 @@
     enabled: yes
 
 
-- name: "Create slurmd container"
-  containers.podman.podman_container:
-    name: slurmd
-    image: "head:5000/slurmd:latest"
-    pod: "lc{{ '%02d' | format(compute_node_number) }}"
-    ipc: shareable
-    privileged: yes
-    state: present
-    volumes:
-     - "/run/layercake/munge:/run/munge"
-     - "/run/layercake:/run/layercake"
-     - "/run/podman/podman.sock:/run/layercake/podman.sock"
-    generate_systemd:
-      path: /etc/systemd/system
-      container_prefix: layercake
+- name: "Put slurmd container unit file in place"
+  template:
+    src: layercake-slurmd.service.j2
+    dest: /etc/systemd/system/layercake-slurmd.service
+    owner: root
+    group: root
+    mode: 0644
   register: slurmd_container_result
 
 - name: "Reload systemd config"
