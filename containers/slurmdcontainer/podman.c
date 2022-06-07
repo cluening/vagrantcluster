@@ -39,6 +39,10 @@ int _pull_job_container(char *imagename) {
 
   ret = curl_easy_perform(hnd);
 
+  if(ret != CURLE_OK){
+    slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+  }
+
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 200){
     slurm_info("Pulled successfully\n");
@@ -82,6 +86,10 @@ int _create_job_container(char *imagename, char *podname, char *containername){
 
   ret = curl_easy_perform(hnd);
 
+  if(ret != CURLE_OK){
+    slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+  }
+
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 201){
     slurm_info("Created successfully\n");
@@ -120,6 +128,10 @@ int _start_job_container(char *containername) {
 
   ret = curl_easy_perform(hnd);
 
+  if(ret != CURLE_OK){
+    slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+  }
+
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 204){
     slurm_info("Started successfully\n");
@@ -155,6 +167,10 @@ int _wait_job_container(char *containername, char *containerstate){
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
 
   ret = curl_easy_perform(hnd);
+
+  if(ret != CURLE_OK){
+    slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+  }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 200){
@@ -192,6 +208,10 @@ int _kill_job_container(char *containername){
 
   ret = curl_easy_perform(hnd);
 
+  if(ret != CURLE_OK){
+    slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+  }
+
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 204){
     slurm_info("Killed successfully\n");
@@ -227,6 +247,10 @@ int _delete_job_container(char *containername){
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "DELETE");
 
   ret = curl_easy_perform(hnd);
+
+  if(ret != CURLE_OK){
+    slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+  }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 200){
