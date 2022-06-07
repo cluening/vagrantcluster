@@ -34,16 +34,13 @@ int slurm_spank_init(spank_t sp, int ac, char **av){
 }
 
 
-int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
-  int filedescriptor, result;
-  pid_t processid;
-  char mntnspath[255];
+int slurm_spank_init_post_opt(spank_t sp, int ac, char **av){
   char hostname[HOST_NAME_MAX];
 
   char imagename[] = "head:5000/jobcontainer:latest";
   char containername[] = "libcurljobcontainer";
 
-  slurm_info("In slurm_spank_task_init_privileged: uid %d", getuid());
+  slurm_info("In slurm_spank_init_post_opt: uid %d", getuid());
 
   gethostname(hostname, HOST_NAME_MAX);
 
@@ -54,6 +51,17 @@ int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
  
   // FIXME: there's a race condition here between the container entering "running" state and the pid file actually getting written out
   sleep(2);
+
+  return 0;
+}
+
+
+int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
+  int filedescriptor, result;
+  pid_t processid;
+  char mntnspath[255];
+
+  slurm_info("In slurm_spank_task_init_privileged: uid %d", getuid());
 
   processid = _get_job_container_pid();
 
