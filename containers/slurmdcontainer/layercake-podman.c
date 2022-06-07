@@ -34,7 +34,7 @@ int slurm_spank_init(spank_t sp, int ac, char **av){
 }
 
 
-int slurm_spank_task_init(spank_t sp, int ac, char **av){
+int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
   int filedescriptor, result;
   pid_t processid;
   char mntnspath[255];
@@ -43,7 +43,7 @@ int slurm_spank_task_init(spank_t sp, int ac, char **av){
   char imagename[] = "head:5000/jobcontainer:latest";
   char containername[] = "libcurljobcontainer";
 
-  slurm_info("in slurm_spank_task_init");
+  slurm_info("In slurm_spank_task_init_privileged: uid %d", getuid());
 
   gethostname(hostname, HOST_NAME_MAX);
 
@@ -64,6 +64,15 @@ int slurm_spank_task_init(spank_t sp, int ac, char **av){
   slurm_info("setns result: %d\n", result);
 
   return 0;
+}
+
+
+int slurm_spank_task_init(spank_t sp, int ac, char **av){
+
+
+  slurm_info("In slurm_spank_task_init: uid %d", getuid());
+
+
 }
 
 
