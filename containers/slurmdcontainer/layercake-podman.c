@@ -2,6 +2,8 @@
 #include <limits.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <errno.h>
+#include <string.h>
 #include <sched.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -57,19 +59,25 @@ int slurm_spank_init_post_opt(spank_t sp, int ac, char **av){
 
 
 int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
-  int filedescriptor, result;
+  int errornumber, filedescriptor, result;
   pid_t processid;
-  char mntnspath[255];
+  char mntnspath[PATH_MAX];
 
   slurm_info("In slurm_spank_task_init_privileged: uid %d", getuid());
 
   processid = _get_job_container_pid();
 
-  snprintf(mntnspath, 255, "/proc/%d/ns/mnt", processid);
+  snprintf(mntnspath, PATH_MAX, "/proc/%d/ns/mnt", processid);
   filedescriptor = open(mntnspath, O_RDONLY);
   result = setns(filedescriptor, 0);
 
-  slurm_info("setns result: %d\n", result);
+  if(result == 0){
+    slurm_info("setns() succeeded");
+  } else {
+		errornumber = errno;
+    slurm_info("setns() failed: %s", strerror(errornumber));
+    return -1;
+	}
 
   return 0;
 }

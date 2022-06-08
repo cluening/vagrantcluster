@@ -35,7 +35,7 @@ int _pull_job_container(char *imagename) {
   curl_easy_setopt(hnd, CURLOPT_URL, url);
   curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
 
-  slurm_info("Pulling image\n");
+  slurm_info("Pulling image");
 
   ret = curl_easy_perform(hnd);
 
@@ -45,9 +45,9 @@ int _pull_job_container(char *imagename) {
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 200){
-    slurm_info("Pulled successfully\n");
+    slurm_info("Pulled successfully");
   } else {
-    slurm_info("Failed to pull.  Response code: %d\n", responsecode);
+    slurm_info("Failed to pull.  Response code: %d", responsecode);
   }
 
   curl_easy_cleanup(hnd);
@@ -111,9 +111,9 @@ int _create_job_container(char *imagename, char *podname, char *containername){
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 201){
-    slurm_info("Created successfully\n");
+    slurm_info("Created successfully");
   } else {
-    slurm_info("Failed to create.  Response code: %d\n", responsecode);
+    slurm_info("Failed to create.  Response code: %d", responsecode);
   }
 
   curl_easy_cleanup(hnd);
@@ -153,9 +153,9 @@ int _start_job_container(char *containername) {
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 204){
-    slurm_info("Started successfully\n");
+    slurm_info("Started successfully");
   } else {
-    slurm_info("Failed to start.  Response code: %d\n", responsecode);
+    slurm_info("Failed to start.  Response code: %d", responsecode);
   }
 
   curl_easy_cleanup(hnd);
@@ -193,9 +193,9 @@ int _wait_job_container(char *containername, char *containerstate){
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 200){
-    slurm_info("Waited successfully\n");
+    slurm_info("Waited successfully");
   } else {
-    slurm_info("Failed to wait.  Response code: %d\n", responsecode);
+    slurm_info("Failed to wait.  Response code: %d", responsecode);
   }
 
   curl_easy_cleanup(hnd);
@@ -233,9 +233,9 @@ int _kill_job_container(char *containername){
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 204){
-    slurm_info("Killed successfully\n");
+    slurm_info("Killed successfully");
   } else {
-    slurm_info("Failed to kill.  Response code: %d\n", responsecode);
+    slurm_info("Failed to kill.  Response code: %d", responsecode);
   }
 
   curl_easy_cleanup(hnd);
@@ -273,9 +273,9 @@ int _delete_job_container(char *containername){
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
   if(responsecode == 200){
-    slurm_info("Deleted successfully\n");
+    slurm_info("Deleted successfully");
   } else {
-    slurm_info("Failed to delete.  Response code: %d\n", responsecode);
+    slurm_info("Failed to delete.  Response code: %d", responsecode);
   }
 
   curl_easy_cleanup(hnd);
