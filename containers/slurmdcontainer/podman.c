@@ -41,6 +41,7 @@ int _pull_job_container(char *imagename) {
 
   if(ret != CURLE_OK){
     slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+    return -1;
   }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
@@ -107,6 +108,7 @@ int _create_job_container(char *imagename, char *podname, char *containername){
 
   if(ret != CURLE_OK){
     slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+    return -1;
   }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
@@ -149,6 +151,7 @@ int _start_job_container(char *containername) {
 
   if(ret != CURLE_OK){
     slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+    return -1;
   }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
@@ -189,6 +192,7 @@ int _wait_job_container(char *containername, char *containerstate){
 
   if(ret != CURLE_OK){
     slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+    return -1;
   }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
@@ -229,6 +233,7 @@ int _kill_job_container(char *containername){
 
   if(ret != CURLE_OK){
     slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+    return -1;
   }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
@@ -269,6 +274,7 @@ int _delete_job_container(char *containername){
 
   if(ret != CURLE_OK){
     slurm_info("curl error %d: %s", ret, curl_easy_strerror(ret));
+    return -1;
   }
 
   curl_easy_getinfo(hnd, CURLINFO_RESPONSE_CODE, &responsecode);
