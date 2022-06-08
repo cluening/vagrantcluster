@@ -27,7 +27,9 @@ ExecStart=/usr/bin/podman run \
 	--name slurmd \
 	-v /run/layercake/munge:/run/munge \
 	-v /run/layercake:/run/layercake \
-	-v /run/podman/podman.sock:/run/layercake/podman.sock head:5000/slurmd
+	-v /run/podman/podman.sock:/run/layercake/podman.sock \
+	-v /home:/home \
+	head:5000/slurmd
 ExecStop=/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
 ExecStopPost=/usr/bin/podman rm -f --ignore --cidfile=%t/%n.ctr-id
 Type=notify

@@ -67,7 +67,26 @@ int _create_job_container(char *imagename, char *podname, char *containername){
   char *createjson;
   size_t createjsonlength;
 
-  char createjsontemplate[] = "{ \"image\": \"%s\", \"pod\": \"%s\", \"name\": \"%s\", \"mounts\": [ { \"Source\": \"/run/layercake\", \"Destination\": \"/run/layercake\", \"Type\": \"bind\" }, { \"Source\": \"/etc/layercake\", \"Destination\": \"/etc/layercake\", \"Type\": \"bind\" } ] }";
+  char createjsontemplate[] = 
+    "{"
+      "\"image\": \"%s\","
+      "\"pod\": \"%s\","
+      "\"name\": \"%s\","
+      "\"mounts\": ["
+      "{ \"Source\": \"/run/layercake\","
+        "\"Destination\": \"/run/layercake\","
+        "\"Type\": \"bind\" "
+      "},"
+      "{ \"Source\": \"/etc/layercake\","
+        "\"Destination\": \"/etc/layercake\","
+        "\"Type\": \"bind\" "
+      "},"
+      "{ \"Source\": \"/home\","
+        "\"Destination\": \"/home\","
+        "\"Type\": \"bind\" "
+      "}"
+      "]"
+    "}";
 
   createjsonlength = snprintf(NULL, 0, createjsontemplate, imagename, podname, containername);
   createjson = malloc((createjsonlength + 1) * sizeof(char));
