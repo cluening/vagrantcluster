@@ -1,0 +1,1 @@
+vagrant:x:1000:1000::/home/vagrant:/bin/bash

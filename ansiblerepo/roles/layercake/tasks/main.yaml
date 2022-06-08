@@ -41,6 +41,14 @@
     group: root
     mode: '0644'
 
+- name: "Put passwd append file in place"
+  ansible.builtin.copy:
+    src: passwd.append
+    dest: /etc/layercake/passwd.append
+    owner: root
+    group: root
+    mode: 0644
+
 
 - name: "Enable the podman service"
   ansible.builtin.systemd:
