@@ -1,0 +1,27 @@
+---
+- name: "Create registry storage"
+  ansible.builtin.file:
+    path: /var/lib/registry
+    state: directory
+    mode: '0755'
+
+- name: "Put registry container unit file in place"
+  template:
+    src: layercake-registry.service.j2
+    dest: /etc/systemd/system/layercake-registry.service
+    owner: root
+    group: root
+    mode: 0644
+  register: registry_container_result
+
+- name: "Reload systemd config"
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  when: registry_container_result.changed
+
+- name: "Enable and start registry container"
+  ansible.builtin.systemd:
+    name: layercake-registry
+    state: started
+    enabled: yes
+  
