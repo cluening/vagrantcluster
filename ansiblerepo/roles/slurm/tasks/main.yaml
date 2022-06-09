@@ -28,6 +28,15 @@
   notify:
    - restart slurmctld
 
+# FIXME: the layercake-podman plugin should be installed via an RPM
+- name: Slurm layercake plugin
+  copy:
+    src: layercake-podman.so
+    dest: /usr/lib/slurm/layercake-podman.so
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Munge key file
   copy: src=munge.key dest=/etc/munge/munge.key mode=0400 owner=munge group=munge
   notify:
