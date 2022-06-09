@@ -51,35 +51,37 @@ int slurm_spank_init_post_opt(spank_t sp, int ac, char **av){
 
   slurm_info("In slurm_spank_init_post_opt: uid %d", getuid());
 
-  gethostname(hostname, HOST_NAME_MAX);
+  if(spank_remote(sp)){
+    gethostname(hostname, HOST_NAME_MAX);
 
-  result = _pull_job_container(imagename);
-  if(result != 0){
-    slurm_info("Failed to pull job container image");
-    return -1;
+    result = _pull_job_container(imagename);
+    if(result != 0){
+      slurm_info("Failed to pull job container image");
+      return -1;
+    }
+
+    result = _create_job_container(imagename, hostname, containername);
+    if(result != 0){
+      slurm_info("Failed to create job container");
+      return -1;
+    }
+
+    result = _start_job_container(containername);
+    if(result != 0){
+      slurm_info("Failed to start job container");
+      return -1;
+    }
+
+    result = _wait_job_container(containername, "running");
+    if(result != 0){
+      slurm_info("Failed to wait for job container");
+      return -1;
+    }
+
+    // FIXME: there's a race condition here between the container entering "running" state and the pid file actually getting written out
+    sleep(2);
+
   }
-
-  result = _create_job_container(imagename, hostname, containername);
-  if(result != 0){
-    slurm_info("Failed to create job container");
-    return -1;
-  }
-
-  result = _start_job_container(containername);
-  if(result != 0){
-    slurm_info("Failed to start job container");
-    return -1;
-  }
-
-  result = _wait_job_container(containername, "running");
-  if(result != 0){
-    slurm_info("Failed to wait for job container");
-    return -1;
-  }
-
-  // FIXME: there's a race condition here between the container entering "running" state and the pid file actually getting written out
-  sleep(2);
-
   return 0;
 }
 
@@ -91,23 +93,25 @@ int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
 
   slurm_info("In slurm_spank_task_init_privileged: uid %d", getuid());
 
-  processid = _get_job_container_pid();
-  if(processid < 0){
-    slurm_info("Failed to get job container pid");
-    return -1;
+  if(spank_remote(sp)){
+    processid = _get_job_container_pid();
+    if(processid < 0){
+      slurm_info("Failed to get job container pid");
+      return -1;
+    }
+
+    snprintf(mntnspath, PATH_MAX, "/proc/%d/ns/mnt", processid);
+    filedescriptor = open(mntnspath, O_RDONLY);
+    result = setns(filedescriptor, 0);
+
+    if(result == 0){
+      slurm_info("setns() succeeded");
+    } else {
+      errornumber = errno;
+      slurm_info("setns() failed: %s", strerror(errornumber));
+      return -1;
+    }
   }
-
-  snprintf(mntnspath, PATH_MAX, "/proc/%d/ns/mnt", processid);
-  filedescriptor = open(mntnspath, O_RDONLY);
-  result = setns(filedescriptor, 0);
-
-  if(result == 0){
-    slurm_info("setns() succeeded");
-  } else {
-		errornumber = errno;
-    slurm_info("setns() failed: %s", strerror(errornumber));
-    return -1;
-	}
 
   return 0;
 }
@@ -126,24 +130,26 @@ int slurm_spank_exit(spank_t sp, int ac, char **av){
 
   slurm_info("in slurm_spank_exit");
 
-  result = _kill_job_container(containername);
-  if(result != 0){
-    slurm_info("Failed to kill job container");
-    return -1;
-  }
+  if(spank_remote(sp)){
+    result = _kill_job_container(containername);
+    if(result != 0){
+      slurm_info("Failed to kill job container");
+      return -1;
+    }
 
-  result = _wait_job_container(containername, "exited");
-  if(result != 0){
-    slurm_info("Failed to wait for job container");
-    return -1;
-  }
+    result = _wait_job_container(containername, "exited");
+    if(result != 0){
+      slurm_info("Failed to wait for job container");
+      return -1;
+    }
 
-  result = _delete_job_container(containername);
-  if(result != 0){
-    slurm_info("Failed to delete job container");
-    return -1;
+    result = _delete_job_container(containername);
+    if(result != 0){
+      slurm_info("Failed to delete job container");
+      return -1;
+    }
+    slurm_info("job container cleaned up");
   }
-  slurm_info("job container cleaned up");
 
   return 0;
 }
