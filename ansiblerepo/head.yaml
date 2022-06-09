@@ -2,6 +2,7 @@
 - hosts: head
   roles:
     - base
+    - networking
 #    - common
 #    - clusterhead
 #    - slurm
