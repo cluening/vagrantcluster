@@ -1,4 +1,10 @@
 ---
+- name: "Install podman packages"
+  ansible.builtin.dnf:
+    name:
+      - podman
+    state: present
+
 - name: "Disable selinux"
   selinux:
     state: "disabled"

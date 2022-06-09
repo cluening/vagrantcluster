@@ -1,5 +1,5 @@
 ---
-- hosts: head
+- hosts: headnodes
   roles:
     - base
     - networking

@@ -15,6 +15,9 @@
 - name: Slurm config directory
   file: state=directory path=/etc/slurm mode=0755
 
+- name: Slurm plugin directory
+  file: state=directory path=/usr/lib/slurm mode=0755
+
 - name: Munge config directory
   file: state=directory path=/etc/munge mode=0700 owner=munge group=munge 
 
