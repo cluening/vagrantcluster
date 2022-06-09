@@ -3,6 +3,7 @@
   roles:
     - base
     - networking
+    - slurm
 #    - common
 #    - clusterhead
 #    - slurm

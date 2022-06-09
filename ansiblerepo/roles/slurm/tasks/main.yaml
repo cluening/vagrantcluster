@@ -1,21 +1,16 @@
 ---
-- name: slurm client packages
-  yum:
-    name: "ohpc-slurm-client"
+- name: Slurm packages
+  dnf:
+    name:
+      - slurm
+      - slurm-slurmctld
+      - slurm-devel
     state: present
-  when: "('compute' in group_names) or
-         ('fe' in group_names)"
 
-- name: Slurm Server Packages
-  yum:
-    name: "ohpc-slurm-server"
-    state: present
-  when: "'head' in group_names"
-
-- name: slurm user
-  user:
-    name: slurm
-    system: yes
+# - name: slurm user
+#   user:
+#     name: slurm
+#     system: yes
 
 - name: Slurm config directory
   file: state=directory path=/etc/slurm mode=0755
@@ -24,23 +19,17 @@
   file: state=directory path=/etc/munge mode=0700 owner=munge group=munge 
 
 - name: Slurm config file
-  copy: src=etc/slurm/slurm.conf dest=/etc/slurm/slurm.conf
+  template: src=slurm.conf.j2 dest=/etc/slurm/slurm.conf
   notify:
-   - restart slurmd
    - restart slurmctld
 
 - name: Munge key file
-  copy: src=etc/munge/munge.key dest=/etc/munge/munge.key mode=0400 owner=munge group=munge
+  copy: src=munge.key dest=/etc/munge/munge.key mode=0400 owner=munge group=munge
   notify:
    - restart munge
 
 - name: Munge Service
   service: name=munge state=started enabled=yes
 
-- name: slurmd service
-  service: name=slurmd state=started enabled=yes
-  when: "'compute' in group_names"
-
 - name: Slurm Control Service
   service: name=slurmctld state=started enabled=yes
-  when: "'head' in group_names"
