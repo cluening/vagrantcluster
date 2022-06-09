@@ -10,5 +10,13 @@
   blockinfile:
     path: /etc/hosts
     block: |
-      192.168.56.2    head slurm
-    marker: "# {mark} ANSIBLE MANAGED BLOCK head"
+      {{ hostvars["head"]["netconfig"]["cvlan"]["ipv4_address"] }}    head slurm
+      {{ hostvars["node01"]["netconfig"]["cvlan"]["ipv4_address"] }}    node01
+      {{ hostvars["node02"]["netconfig"]["cvlan"]["ipv4_address"] }}    node02
+      {{ hostvars["node03"]["netconfig"]["cvlan"]["ipv4_address"] }}    node03
+      {{ hostvars["node04"]["netconfig"]["cvlan"]["ipv4_address"] }}    node04
+      {{ hostvars["node01"]["netconfig"]["cvlan"]["pod_ipv4_address"] }}    lc01
+      {{ hostvars["node02"]["netconfig"]["cvlan"]["pod_ipv4_address"] }}    lc02
+      {{ hostvars["node03"]["netconfig"]["cvlan"]["pod_ipv4_address"] }}    lc03
+      {{ hostvars["node04"]["netconfig"]["cvlan"]["pod_ipv4_address"] }}    lc04
+    marker: "# {mark} ANSIBLE MANAGED BLOCK clusterhosts"

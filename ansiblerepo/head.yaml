@@ -1,6 +1,7 @@
 ---
 - hosts: head
   roles:
-    - common
-    - clusterhead
-    - slurm
+    - base
+#    - common
+#    - clusterhead
+#    - slurm
