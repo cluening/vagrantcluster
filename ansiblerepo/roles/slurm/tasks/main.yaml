@@ -23,6 +23,11 @@
   notify:
    - restart slurmctld
 
+- name: Slurm plugstack config file
+  template: src=plugstack.conf.j2 dest=/etc/slurm/plugstack.conf
+  notify:
+   - restart slurmctld
+
 - name: Munge key file
   copy: src=munge.key dest=/etc/munge/munge.key mode=0400 owner=munge group=munge
   notify:
