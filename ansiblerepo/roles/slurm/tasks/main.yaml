@@ -7,11 +7,6 @@
       - slurm-devel
     state: present
 
-# - name: slurm user
-#   user:
-#     name: slurm
-#     system: yes
-
 - name: Slurm config directory
   file: state=directory path=/etc/slurm mode=0755
 
