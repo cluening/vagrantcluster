@@ -20,6 +20,12 @@ pid_t _get_job_container_pid(){
   FILE *fp;
 
   fp = fopen("/run/layercake/job_container_pid", "r");
+
+  if(fp == NULL){
+    slurm_info("opening job container pid file failed: %s", strerror(errno));
+    return -1;
+  }
+
   fscanf(fp, "%d", &pid);
   fclose(fp);
 
@@ -86,6 +92,10 @@ int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
   slurm_info("In slurm_spank_task_init_privileged: uid %d", getuid());
 
   processid = _get_job_container_pid();
+  if(processid < 0){
+    slurm_info("Failed to get job container pid");
+    return -1;
+  }
 
   snprintf(mntnspath, PATH_MAX, "/proc/%d/ns/mnt", processid);
   filedescriptor = open(mntnspath, O_RDONLY);
