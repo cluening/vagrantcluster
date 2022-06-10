@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdint.h>
 #include <errno.h>
 #include <string.h>
 #include <sched.h>
@@ -15,11 +16,15 @@
 SPANK_PLUGIN(layercake-podman, 1)
 
 
-pid_t _get_job_container_pid(){
+pid_t _get_job_container_pid(uint32_t jobid){
   pid_t pid;
   FILE *fp;
+  char pathtemplate[] = "/run/layercake/job_container_pid.%d";
+  char path[255];
 
-  fp = fopen("/run/layercake/job_container_pid", "r");
+  snprintf(path, 255, pathtemplate, jobid);
+
+  fp = fopen(path, "r");
 
   if(fp == NULL){
     slurm_info("opening job container pid file failed: %s", strerror(errno));
@@ -30,6 +35,19 @@ pid_t _get_job_container_pid(){
   fclose(fp);
 
   return pid;
+}
+
+
+int _remove_job_container_pid_file(uint32_t jobid){
+  char pathtemplate[] = "/run/layercake/job_container_pid.%d";
+  char path[255];
+  int result;
+
+  snprintf(path, 255, pathtemplate, jobid);
+
+  result = unlink(path);
+
+  return result;
 }
 
 
@@ -45,6 +63,8 @@ int slurm_spank_init(spank_t sp, int ac, char **av){
 int slurm_spank_init_post_opt(spank_t sp, int ac, char **av){
   int result;
   char hostname[HOST_NAME_MAX];
+  spank_err_t rc;
+  uint32_t jobid;
 
   char imagename[] = "head:5000/jobcontainer:latest";
   char containername[] = "libcurljobcontainer";
@@ -54,13 +74,17 @@ int slurm_spank_init_post_opt(spank_t sp, int ac, char **av){
   if(spank_remote(sp)){
     gethostname(hostname, HOST_NAME_MAX);
 
+    rc = spank_get_item(sp, S_JOB_ID, &jobid);
+
+    slurm_info("Job id: %d", jobid);
+
     result = _pull_job_container(imagename);
     if(result != 0){
       slurm_info("Failed to pull job container image");
       return -1;
     }
 
-    result = _create_job_container(imagename, hostname, containername);
+    result = _create_job_container(imagename, hostname, containername, jobid);
     if(result != 0){
       slurm_info("Failed to create job container");
       return -1;
@@ -90,11 +114,15 @@ int slurm_spank_task_init_privileged(spank_t sp, int ac, char **av){
   int errornumber, filedescriptor, result;
   pid_t processid;
   char mntnspath[PATH_MAX];
+  spank_err_t rc;
+  uint32_t jobid;
 
   slurm_info("In slurm_spank_task_init_privileged: uid %d", getuid());
 
   if(spank_remote(sp)){
-    processid = _get_job_container_pid();
+    rc = spank_get_item(sp, S_JOB_ID, &jobid);
+
+    processid = _get_job_container_pid(jobid);
     if(processid < 0){
       slurm_info("Failed to get job container pid");
       return -1;
@@ -124,6 +152,8 @@ int slurm_spank_task_init(spank_t sp, int ac, char **av){
 
 int slurm_spank_exit(spank_t sp, int ac, char **av){
   int result;
+  spank_err_t rc;
+  uint32_t jobid;
 
   char imagename[] = "jobcontainer";
   char containername[] = "libcurljobcontainer";
@@ -148,6 +178,10 @@ int slurm_spank_exit(spank_t sp, int ac, char **av){
       slurm_info("Failed to delete job container");
       return -1;
     }
+
+    rc = spank_get_item(sp, S_JOB_ID, &jobid);
+    _remove_job_container_pid_file(jobid);
+
     slurm_info("job container cleaned up");
   }
 

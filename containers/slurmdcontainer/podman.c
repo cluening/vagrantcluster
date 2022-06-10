@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <curl/curl.h>
 #include <slurm/spank.h>
@@ -60,7 +61,7 @@ int _pull_job_container(char *imagename) {
 }
 
 
-int _create_job_container(char *imagename, char *podname, char *containername){
+int _create_job_container(char *imagename, char *podname, char *containername, uint32_t jobid){
   CURLcode ret;
   CURL *hnd;
   struct curl_slist *slist1;
@@ -73,25 +74,29 @@ int _create_job_container(char *imagename, char *podname, char *containername){
       "\"image\": \"%s\","
       "\"pod\": \"%s\","
       "\"name\": \"%s\","
+      "\"env\": {"
+        "\"LAYERCAKE_JOBID\": \"%d\""
+      "},"
       "\"mounts\": ["
-      "{ \"Source\": \"/run/layercake\","
-        "\"Destination\": \"/run/layercake\","
-        "\"Type\": \"bind\" "
-      "},"
-      "{ \"Source\": \"/etc/layercake\","
-        "\"Destination\": \"/etc/layercake\","
-        "\"Type\": \"bind\" "
-      "},"
-      "{ \"Source\": \"/home\","
-        "\"Destination\": \"/home\","
-        "\"Type\": \"bind\" "
-      "}"
+        "{ \"Source\": \"/run/layercake\","
+          "\"Destination\": \"/run/layercake\","
+          "\"Type\": \"bind\" "
+        "},"
+        "{ \"Source\": \"/etc/layercake\","
+          "\"Destination\": \"/etc/layercake\","
+          "\"Type\": \"bind\" "
+        "},"
+        "{ \"Source\": \"/home\","
+          "\"Destination\": \"/home\","
+          "\"Type\": \"bind\" "
+        "}"
       "]"
     "}";
 
-  createjsonlength = snprintf(NULL, 0, createjsontemplate, imagename, podname, containername);
+  createjsonlength = snprintf(NULL, 0, createjsontemplate, imagename, podname, containername, jobid);
   createjson = malloc((createjsonlength + 1) * sizeof(char));
-  sprintf(createjson, createjsontemplate, imagename, podname, containername);
+  sprintf(createjson, createjsontemplate, imagename, podname, containername, jobid);
+  slurm_info("%s", createjson);
 
   slist1 = NULL;
   slist1 = curl_slist_append(slist1, "Content-Type: application/json");
