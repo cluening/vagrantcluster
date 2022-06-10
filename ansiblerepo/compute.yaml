@@ -4,6 +4,7 @@
     - base
     - networking
     - layercake
+    - nfs-client
     #- common
     #- slurm
     #- nfs-client

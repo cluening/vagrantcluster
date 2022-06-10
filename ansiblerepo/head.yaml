@@ -5,6 +5,7 @@
     - networking
     - slurm
     - containerregistry
+    - nfs-server
 #    - common
 #    - clusterhead
 #    - slurm

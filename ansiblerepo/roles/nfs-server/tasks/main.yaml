@@ -1,8 +1,16 @@
 ---
+- name: "Install NFS packages"
+  dnf:
+    name: nfs-utils
+    state: present
+
 - name: exports file
   copy: src=etc/exports dest=/etc/exports
   notify:
    - restart nfs
 
 - name: nfs service
-  service: name=nfs state=started enabled=yes
+  service: 
+    name: nfs-server
+    state: started
+    enabled: yes
