@@ -13,6 +13,13 @@
     mode: '0755'
 
 
+- name: "Create a layercake tmp directory"
+  ansible.builtin.file:
+    path: /tmp/layercakepodtmp
+    state: directory
+    mode: '1777'
+
+
 - name: "Create layercake unit file"
   template:
     src: layercake.service.j2

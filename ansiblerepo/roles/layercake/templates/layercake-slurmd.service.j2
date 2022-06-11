@@ -25,6 +25,7 @@ ExecStart=/usr/bin/podman run \
 	--privileged \
 	--pod lc{{ '%02d' | format(compute_node_number) }} \
 	--name slurmd \
+	-v /tmp/layercakepodtmp:/tmp \
 	-v /run/layercake/munge:/run/munge \
 	-v /run/layercake:/run/layercake \
 	-v /run/podman/podman.sock:/run/layercake/podman.sock \
