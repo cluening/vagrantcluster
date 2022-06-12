@@ -27,6 +27,7 @@ ExecStart=/usr/bin/podman run \
 	--name slurmd \
 	-v /tmp/layercakepodtmp:/tmp \
 	-v /run/layercake/munge:/run/munge \
+	-v /var/layercakepodspool:/var/spool \
 	-v /run/layercake:/run/layercake \
 	-v /run/podman/podman.sock:/run/layercake/podman.sock \
 	-v /home:/home \

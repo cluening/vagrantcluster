@@ -17,6 +17,7 @@ RUN dnf install -y \
     pmix-devel \
     slurm \
     slurm-devel \
+    slurm-nss_slurm \
     slurm-pmi \
     which \
 && dnf group install -y "Development Tools"
@@ -29,6 +30,8 @@ WORKDIR /layercake
 RUN gcc -o layercakepause layercakepause.c
 #RUN mkdir -p /usr/lib/slurm \
 #&& gcc -fPIC -lcurl -shared -o /usr/lib/slurm/layercake-podman.so layercake-podman.c podman.c
+
+RUN sed -i 's/sss files systemd/slurm sss files systemd/g' /etc/nsswitch.conf
 
 WORKDIR /
 

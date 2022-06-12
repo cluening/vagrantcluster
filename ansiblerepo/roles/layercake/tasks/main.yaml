@@ -19,6 +19,12 @@
     state: directory
     mode: '1777'
 
+- name: "Create layercake spool directory"
+  ansible.builtin.file:
+    path: /var/layercakepodspool
+    state: directory
+    mode: 0755
+
 
 - name: "Create layercake unit file"
   template:
@@ -47,14 +53,6 @@
     owner: root
     group: root
     mode: '0644'
-
-- name: "Put passwd append file in place"
-  ansible.builtin.copy:
-    src: passwd.append
-    dest: /etc/layercake/passwd.append
-    owner: root
-    group: root
-    mode: 0644
 
 
 - name: "Enable the podman service"
