@@ -6,6 +6,10 @@ passwd:
       ssh_authorized_keys:
         - "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"
 storage:
+  directories:
+    - path: /etc/layercake
+    - path: /var/layercakepodspool
+
   files:
     - path: "/etc/NetworkManager/system-connections/Wired connection 2.nmconnection"
       mode: 0600
@@ -29,7 +33,7 @@ storage:
 
           [proxy]
 
-    - path: /etc/munge/munge.key
+    - path: /etc/layercake/munge.key
       mode: 0400
       contents:
         local: munge.key
@@ -52,6 +56,12 @@ storage:
 
 systemd:
   units:
+    - name: podman.service
+      enabled: true
+
+    - name: podman.socket
+      enabled: true
+
     - name: layercake-network.service
       enabled: true
       contents: |
@@ -79,6 +89,25 @@ systemd:
         Type=oneshot
         ExecStart=mkdir -p /run/layercake/munge
         ExecStart=mkdir -p /tmp/layercakepodtmp
+        ExecStart=mkdir -p /etc/layercake
+        RemainAfterExit=true
+        StandardOutput=journal
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: layercake-mungekey.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Create the munge key secret
+        After=network-online.target
+        ConditionPathExists=!/etc/layercake/mungekeycreated
+
+        [Service]
+        Type=oneshot
+        ExecStart=podman secret create mungekey /etc/layercake/munge.key
+        ExecStart=touch /etc/layercake/mungekeycreated
         RemainAfterExit=true
         StandardOutput=journal
 
@@ -151,8 +180,8 @@ systemd:
           --replace \
           -ti \
           --pod lc03 \
-          -v /tmp/layercakepodtmp:/tmp \
-          -v /run/layercake/munge:/run/munge \
+          -v /tmp/layercakepodtmp:/tmp:z \
+          -v /run/layercake/munge:/run/munge:z \
           --secret mungekey \
           --name munged head:5000/munged
         ExecStop=/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
@@ -193,11 +222,11 @@ systemd:
           --privileged \
           --pod lc03 \
           --name slurmd \
-          -v /tmp/layercakepodtmp:/tmp \
-          -v /run/layercake/munge:/run/munge \
-          -v /var/layercakepodspool:/var/spool \
-          -v /run/layercake:/run/layercake \
-          -v /run/podman/podman.sock:/run/layercake/podman.sock \
+          -v /tmp/layercakepodtmp:/tmp:z \
+          -v /run/layercake/munge:/run/munge:z \
+          -v /var/layercakepodspool:/var/spool:z \
+          -v /run/layercake:/run/layercake:z \
+          -v /run/podman/podman.sock:/run/layercake/podman.sock:z \
           -v /home:/home \
           head:5000/slurmd
         ExecStop=/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
