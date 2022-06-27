@@ -9,6 +9,7 @@ storage:
   directories:
     - path: /etc/layercake
     - path: /var/layercakepodspool
+    - path: /var/home/vagrant
 
   files:
     - path: "/etc/NetworkManager/system-connections/Wired connection 2.nmconnection"
@@ -61,6 +62,22 @@ systemd:
 
     - name: podman.socket
       enabled: true
+
+    - name: var-home-vagrant.mount
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Mount /home/vagrant
+        Wants=network-online.target
+        After=network-online.target
+
+        [Mount]
+        What=head:/home/vagrant
+        Where=/var/home/vagrant
+        Type=nfs4
+
+        [Install]
+        WantedBy=multi-user.target
 
     - name: layercake-network.service
       enabled: true
