@@ -39,23 +39,24 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "node02" do |node02|
-    #node02.vm.box = "centos/7"
-    #node02.vm.box = "generic/centos8"
     node02.vm.box = "fedora/36-cloud-base"
     node02.vm.hostname = "node02"
-    #node02.vm.network :private_network, ip: "192.168.56.102", mac: "aabbccccbbaa"
-    #node02.vm.network :private_network, ip: "192.168.56.102", virtualbox__intnet: true
     node02.vm.network :private_network, ip: "192.168.56.102"
   end
 
   config.vm.define "node03" do |node03|
-    node03.vm.box = "fedora/36-cloud-base"
+#    node03.vm.box = "fedora/36-cloud-base"
+    node03.vm.box = "fedora-coreos"
     node03.vm.hostname = "node03"
     node03.vm.network :private_network, ip: "192.168.56.103"
+    node03.vm.provider :libvirt do |lv|
+      lv.qemuargs :value => '-fw_cfg'
+      lv.qemuargs :value => "name=opt/com.coreos/config,file=/tmp/config.ign"
+    end
   end
 
   config.vm.define "node04" do |node04|
-    node04.vm.box = "centos/7"
+    node04.vm.box = "fedora/36-cloud-base"
     node04.vm.hostname = "node04"
     node04.vm.network :private_network, ip: "192.168.56.104"
   end
