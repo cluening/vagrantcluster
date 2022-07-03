@@ -5,6 +5,7 @@ Description=Layercake prep work
 [Service]
 Type=oneshot
 ExecStart=mkdir -p /run/layercake/munge
+ExecStart=mkdir -p /tmp/layercakepodtmp
 RemainAfterExit=true
 StandardOutput=journal
 

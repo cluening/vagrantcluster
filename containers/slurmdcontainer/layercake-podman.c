@@ -84,7 +84,7 @@ int slurm_spank_init_post_opt(spank_t sp, int ac, char **av){
       return -1;
     }
 
-    result = _create_job_container(imagename, hostname, containername, jobid);
+    result = _create_job_container(imagename, "layercake", containername, jobid);
     if(result != 0){
       slurm_info("Failed to create job container");
       return -1;

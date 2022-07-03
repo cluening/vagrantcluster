@@ -155,7 +155,8 @@ systemd:
         ExecStartPre=/usr/bin/podman pod create \
             --infra-conmon-pidfile %t/layercake-pod.pid \
             --pod-id-file %t/layercake-pod.pod-id \
-            --name lc03 \
+            --name layercake \
+            --hostname lc03 \
             --share ipc,net,uts,pid \
             --network cvlan -p 6818:6818 \
             --ip 192.168.56.113 \
@@ -196,7 +197,7 @@ systemd:
           -d \
           --replace \
           -ti \
-          --pod lc03 \
+          --pod layercake \
           -v /tmp/layercakepodtmp:/tmp:z \
           -v /run/layercake/munge:/run/munge:z \
           --secret mungekey \
@@ -237,7 +238,7 @@ systemd:
           --replace \
           -ti \
           --privileged \
-          --pod lc03 \
+          --pod layercake \
           --name slurmd \
           -v /tmp/layercakepodtmp:/tmp:z \
           -v /run/layercake/munge:/run/munge:z \

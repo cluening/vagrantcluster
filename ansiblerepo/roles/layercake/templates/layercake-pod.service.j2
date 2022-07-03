@@ -19,7 +19,8 @@ ExecStartPre=/bin/rm -f %t/layercake-pod.pid %t/layercake-pod.pod-id
 ExecStartPre=/usr/bin/podman pod create \
     --infra-conmon-pidfile %t/layercake-pod.pid \
     --pod-id-file %t/layercake-pod.pod-id \
-    --name lc{{ '%02d' | format(compute_node_number) }} \
+    --name layercake \
+    --hostname lc{{ '%02d' | format(compute_node_number) }} \
     --share ipc,net,uts,pid \
     --network cvlan -p 6818:6818 \
     --ip {{ netconfig['cvlan']['pod_ipv4_address'] }} \
