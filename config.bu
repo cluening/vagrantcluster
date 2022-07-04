@@ -12,6 +12,12 @@ storage:
     - path: /var/home/vagrant
 
   files:
+    - path: "/etc/sysconfig/layercake"
+      mode: 0644
+      contents:
+        inline: |
+          LAYERCAKE_HOSTNAME=lc03
+          LAYERCAKE_IPV4_ADDR=192.168.56.113
     - path: "/etc/NetworkManager/system-connections/Wired connection 2.nmconnection"
       mode: 0600
       contents:
@@ -149,6 +155,7 @@ systemd:
 
         [Service]
         Environment=PODMAN_SYSTEMD_UNIT=%n
+        EnvironmentFile=-/etc/sysconfig/layercake
         Restart=on-failure
         TimeoutStopSec=70
         ExecStartPre=/bin/rm -f %t/layercake-pod.pid %t/layercake-pod.pod-id
@@ -156,10 +163,10 @@ systemd:
             --infra-conmon-pidfile %t/layercake-pod.pid \
             --pod-id-file %t/layercake-pod.pod-id \
             --name layercake \
-            --hostname lc03 \
+            --hostname $LAYERCAKE_HOSTNAME \
             --share ipc,net,uts,pid \
             --network cvlan -p 6818:6818 \
-            --ip 192.168.56.113 \
+            --ip $LAYERCAKE_IPV4_ADDR \
             --replace
         ExecStart=/usr/bin/podman pod start --pod-id-file %t/layercake-pod.pod-id
         ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/layercake-pod.pod-id -t 10
