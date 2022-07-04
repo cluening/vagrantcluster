@@ -13,6 +13,7 @@ Before=
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=-/etc/sysconfig/layercake
 Restart=on-failure
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/layercake-pod.pid %t/layercake-pod.pod-id
@@ -20,10 +21,10 @@ ExecStartPre=/usr/bin/podman pod create \
     --infra-conmon-pidfile %t/layercake-pod.pid \
     --pod-id-file %t/layercake-pod.pod-id \
     --name layercake \
-    --hostname lc{{ '%02d' | format(compute_node_number) }} \
+    --hostname $LAYERCAKE_HOSTNAME \
     --share ipc,net,uts,pid \
     --network cvlan -p 6818:6818 \
-    --ip {{ netconfig['cvlan']['pod_ipv4_address'] }} \
+    --ip $LAYERCAKE_IPV4_ADDR \
     --replace
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/layercake-pod.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/layercake-pod.pod-id -t 10

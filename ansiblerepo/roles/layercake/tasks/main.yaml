@@ -25,6 +25,13 @@
     state: directory
     mode: 0755
 
+- name: "Create layercake sysconfig file"
+  template:
+    src: layercake.j2
+    dest: /etc/sysconfig/layercake
+    owner: root
+    group: root
+    mode: 0644
 
 - name: "Create layercake unit file"
   template:
