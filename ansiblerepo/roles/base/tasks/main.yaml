@@ -1,6 +1,6 @@
 ---
 - name: modulefiles package
-  yum:
+  dnf:
     name: "lmod-ohpc"
     state: present
 
@@ -9,12 +9,12 @@
     name: America/Denver
 
 - name: python3-libsemanage package
-  yum:
+  dnf:
     name: python3-libsemanage
     state: present
 
 - name: git package
-  yum:
+  dnf:
     name: "git"
     state: present
 
