@@ -5,7 +5,9 @@
     state: present
 
 - name: "Install the clustershell config file"
-  copy: src=etc/clustershell/groups.d/local.cfg dest=/etc/clustershell/groups.d/local.cfg
+  copy:
+    src: etc/clustershell/groups.d/local.cfg
+    dest: /etc/clustershell/groups.d/local.cfg
 
 - name: "Install the pdsh package"
   dnf:
