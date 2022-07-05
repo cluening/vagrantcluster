@@ -1,5 +1,5 @@
 ---
-- hosts: compute
+- hosts: cluster_compute
   roles:
     - base
     - ssh

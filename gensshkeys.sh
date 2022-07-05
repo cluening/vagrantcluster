@@ -4,7 +4,7 @@
 #  - Add --force option
 #  - Add --group option
 
-GROUP_LIST="compute fe head"
+GROUP_LIST="cluster_compute cluster_fe cluster_head"
 INVENTORY_DIR="ansiblerepo/inventory"
 KEYLIST="ecdsa ed25519 rsa"
 

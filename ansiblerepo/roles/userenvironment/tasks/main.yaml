@@ -26,5 +26,5 @@
 
 - name: openmpi mca config variables
   copy: src=etc/profile.d/openmpimca.sh dest=/etc/profile.d/openmpimca.sh owner=root group=root mode=0644
-  when: "('compute' in group_names) or
-         ( 'fe' in group_names)"
+  when: "('cluster_compute' in group_names) or
+         ( 'cluster_fe' in group_names)"

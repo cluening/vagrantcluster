@@ -1,9 +1,8 @@
 ---
-- hosts: fe
+- hosts: cluster_head
   roles:
     - base
     - ssh
     - chrony
+    - clusterhead
     - slurm
-    - nfs-server
-    - userenvironment

@@ -3,14 +3,14 @@
   yum:
     name: "ohpc-slurm-client"
     state: present
-  when: "('compute' in group_names) or
-         ('fe' in group_names)"
+  when: "('cluster_compute' in group_names) or
+         ('cluster_fe' in group_names)"
 
 - name: Slurm Server Packages
   yum:
     name: "ohpc-slurm-server"
     state: present
-  when: "'head' in group_names"
+  when: "'cluster_head' in group_names"
 
 - name: slurm user
   user:
@@ -39,8 +39,8 @@
 
 - name: slurmd service
   service: name=slurmd state=started enabled=yes
-  when: "'compute' in group_names"
+  when: "'cluster_compute' in group_names"
 
 - name: Slurm Control Service
   service: name=slurmctld state=started enabled=yes
-  when: "'head' in group_names"
+  when: "'cluster_head' in group_names"

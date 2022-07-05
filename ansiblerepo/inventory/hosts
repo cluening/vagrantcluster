@@ -1,17 +1,8 @@
-[head]
-head	ansible_connection=local
+[cluster_head]
+head
 
-[head:vars]
-sshgroup=head
-
-[fe]
+[cluster_fe]
 fe1
 
-[fe:vars]
-sshgroup=fe
-
-[compute]
+[cluster_compute]
 node[01:04]
-
-[compute:vars]
-sshgroup=compute
