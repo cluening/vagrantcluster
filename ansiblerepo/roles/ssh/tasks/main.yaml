@@ -1,0 +1,83 @@
+---
+- name: "Install openssh packages"
+  dnf:
+    name:
+     - openssh
+     - openssh-clients
+     - openssh-server
+    state: present
+
+- name: "Enable sshd service"
+  service:
+    name: sshd
+    state: started
+    enabled: yes
+
+- name: "Install /etc/ssh_config"
+  template:
+    src: ssh_config.j2
+    dest: /etc/ssh/ssh_config
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "Install /etc/sshd_config"
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart sshd
+
+- name: "Install /etc/ssh/shosts.equiv"
+  template:
+    src: shosts_equiv.j2
+    dest: /etc/ssh/shosts.equiv
+    owner: root
+    group: root
+    mode: 0444
+  when:
+    - ssh_shosts_equiv is defined
+
+- name: "Install /root/.shosts"
+  template:
+    src: shosts.j2
+    dest: /root/.shosts
+    owner: root
+    group: root
+    mode: 0444
+  when:
+   - ssh_root_shosts is defined
+
+- name: "Install /etc/ssh/ssh_known_hosts"
+  template:
+    src: ssh_known_hosts.j2
+    dest: /etc/ssh/ssh_known_hosts
+    owner: root
+    group: root
+    mode: 0644
+  when: ssh_known_hosts is defined
+
+- name: "Install ssh public keys"
+  vars:
+    ssh_host_key: "{{ ssh_keys[item]['public'] }}"
+  template:
+    src: ssh_host_key.j2
+    dest: /etc/ssh/ssh_host_{{ item }}_key.pub
+    owner: root
+    group: ssh_keys
+    mode: 0640
+  loop: "{{ ssh_keys.keys() }}"
+
+- name: "Install ssh private keys"
+  vars:
+    ssh_host_key: "{{ ssh_keys[item]['private'] }}"
+  template:
+    src: ssh_host_key.j2
+    dest: /etc/ssh/ssh_host_{{ item }}_key
+    owner: root
+    group: ssh_keys
+    mode: 0640
+  loop: "{{ ssh_keys.keys() }}"
+  no_log: true

@@ -1,6 +1,4 @@
 ---
-- include: ssh.yaml
-
 - name: modulefiles package
   yum:
     name: "lmod-ohpc"

@@ -2,39 +2,24 @@
 
 # TODO
 #  - Add --force option
-#  - Add --class option
+#  - Add --group option
 
-CLASSLIST="compute fe head"
-HOSTcompute="node*,192.168.56.1*"
-HOSTfe="fe1,192.168.56.3"
-HOSThead="head,192.168.56.2"
-ETCDIR="ansiblerepo/roles/common/files/etc/"
+GROUP_LIST="compute fe head"
+INVENTORY_DIR="ansiblerepo/inventory"
 KEYLIST="ecdsa ed25519 rsa"
 
-# Check that ETCDIR actually exists
-# FIXME: should probably check that $ETCDIR/ssh.$CLASS exists too
-if ! [ -d $ETCDIR ]; then
-  echo Error: ETCDIR $ETCDIR does not exist
-  exit 1
-fi
+TEMPDIR="$(mktemp -d)"
+trap 'rm -rf -- "$TEMPDIR"' EXIT
 
 # Check if files already exist so we don't overwrite them if they do
 FILEEXISTS=false
-for class in $CLASSLIST; do
-  for key in $KEYLIST; do
-    if [ -e $ETCDIR/ssh.${class}/ssh_host_${key}_key ]; then
-      FILEEXISTS=true
-    fi
-    if [ -e $ETCDIR/ssh.${class}/ssh_host_${key}_key.pub ]; then
-      FILEEXISTS=true
-    fi
-  done
-  if [ -e $ETCDIR/ssh.${class}/ssh_known_hosts ]; then
+for group in $GROUP_LIST; do
+  if [ -e "$INVENTORY_DIR/group_vars/${group}/sshkeys.yaml" ]; then
     FILEEXISTS=true
   fi
 done
 
-# If a file already exists, error out
+# If a file already exists, exit with an error
 if [ "$FILEEXISTS" = true ]; then
   echo Error: one or more ssh key or known_hosts files already exist
   # FIXME: could print list of existing files here
@@ -43,20 +28,17 @@ fi
 
 # Create all of the types of keys that we can
 # FIXME: should probably warn if key generation fails
-for class in $CLASSLIST; do
+for group in $GROUP_LIST; do
+  echo "---" > "$INVENTORY_DIR/group_vars/${group}/sshkeys.yaml"
+  echo "ssh_keys:" >> "$INVENTORY_DIR/group_vars/${group}/sshkeys.yaml"
   for key in $KEYLIST; do
-    /usr/bin/ssh-keygen -q -t $key -f $ETCDIR/ssh.${class}/ssh_host_${key}_key -C '' -N '' >& /dev/null
-  done
-done
-
-# Create the known_hosts files
-for skhclass in $CLASSLIST; do
-  for key in $KEYLIST; do
-    for class in $CLASSLIST; do
-      if [ -e $ETCDIR/ssh.${class}/ssh_host_${key}_key.pub ]; then
-        hostname="HOST$class"
-        echo ${!hostname} `cat $ETCDIR/ssh.${class}/ssh_host_${key}_key.pub` >> $ETCDIR/ssh.${skhclass}/ssh_known_hosts
-      fi
-    done
+    /usr/bin/ssh-keygen -q -t "$key" -f "$TEMPDIR/ssh_host_${key}_key" -C '' -N '' >& /dev/null
+    {
+      echo "  ${key}:"
+      echo "    public: '$(cat "$TEMPDIR/ssh_host_${key}_key.pub")'"
+      echo "    private: |"
+      sed 's/^/      /' < "$TEMPDIR/ssh_host_${key}_key"
+    } >> "$INVENTORY_DIR/group_vars/${group}/sshkeys.yaml"
+    rm "$TEMPDIR/ssh_host_${key}_key" "$TEMPDIR/ssh_host_${key}_key.pub"
   done
 done

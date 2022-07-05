@@ -2,6 +2,7 @@
 - hosts: compute
   roles:
     - common
+    - ssh
     - chrony
     - slurm
     - nfs-client

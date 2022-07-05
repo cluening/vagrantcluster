@@ -2,6 +2,7 @@
 - hosts: fe
   roles:
     - common
+    - ssh
     - chrony
     - slurm
     - nfs-server

@@ -2,6 +2,7 @@
 - hosts: head
   roles:
     - common
+    - ssh
     - chrony
     - clusterhead
     - slurm

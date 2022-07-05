@@ -116,7 +116,7 @@ Vagrant.configure("2") do |config|
     dnf config-manager --set-enabled powertools
     dnf install -y ansible
 
-    ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
+    ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l $(hostname) /vagrant/ansiblerepo/site.yaml
   SHELL
 
 end
