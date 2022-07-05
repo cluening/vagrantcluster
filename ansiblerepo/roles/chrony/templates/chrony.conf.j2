@@ -9,7 +9,7 @@ pool 2.centos.pool.ntp.org iburst
 allow 192.168.56.0
 {% endif %}
 {% if enable_chrony_client | bool %}
-# Get time from the k8s service
+# Get time from the head node
 server head
 {% endif %}
 
