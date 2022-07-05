@@ -1,11 +1,11 @@
-- name: home mount
+- name: "Mount home directories"
   mount:
     name: /home
     src: fe1:/home
     fstype: nfs4
     state: mounted
 
-- name: seboolean nfs home dirs
+- name: "Set seboolean config on nfs home dirs"
   seboolean:
     name: use_nfs_home_dirs
     state: yes
