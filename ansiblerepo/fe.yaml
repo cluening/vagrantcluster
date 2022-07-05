@@ -2,6 +2,7 @@
 - hosts: fe
   roles:
     - common
+    - chrony
     - slurm
     - nfs-server
     - userenvironment

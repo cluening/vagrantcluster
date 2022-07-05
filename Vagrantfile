@@ -21,37 +21,37 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
 
   config.vm.define "head" do |head|
-    head.vm.box = "centos/7"
+    head.vm.box = "bento/centos-stream-8"
     head.vm.hostname = "head"
     head.vm.network :private_network, ip: "192.168.56.2"
   end
 
   config.vm.define "fe1" do |fe1|
-    fe1.vm.box = "centos/7"
+    fe1.vm.box = "bento/centos-stream-8"
     fe1.vm.hostname = "fe1"
     fe1.vm.network :private_network, ip: "192.168.56.3"
   end
 
   config.vm.define "node01" do |node01|
-    node01.vm.box = "centos/7"
+    node01.vm.box = "bento/centos-stream-8"
     node01.vm.hostname = "node01"
     node01.vm.network :private_network, ip: "192.168.56.101"
   end
 
   config.vm.define "node02" do |node02|
-    node02.vm.box = "centos/7"
+    node02.vm.box = "bento/centos-stream-8"
     node02.vm.hostname = "node02"
     node02.vm.network :private_network, ip: "192.168.56.102"
   end
 
   config.vm.define "node03" do |node03|
-    node03.vm.box = "centos/7"
+    node03.vm.box = "bento/centos-stream-8"
     node03.vm.hostname = "node03"
     node03.vm.network :private_network, ip: "192.168.56.103"
   end
 
   config.vm.define "node04" do |node04|
-    node04.vm.box = "centos/7"
+    node04.vm.box = "bento/centos-stream-8"
     node04.vm.hostname = "node04"
     node04.vm.network :private_network, ip: "192.168.56.104"
   end
@@ -112,8 +112,9 @@ Vagrant.configure("2") do |config|
     if [ -f /vagrant/localenv.sh ]; then
       . /vagrant/localenv.sh
     fi
-    yum install -y https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm
-    yum install -y ansible
+    dnf install -y http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm
+    dnf config-manager --set-enabled powertools
+    dnf install -y ansible
 
     ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
   SHELL

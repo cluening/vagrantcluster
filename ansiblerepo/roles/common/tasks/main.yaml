@@ -1,6 +1,5 @@
 ---
 - include: ssh.yaml
-- include: ntp.yaml
 
 - name: modulefiles package
   yum:
@@ -11,9 +10,9 @@
   timezone:
     name: America/Denver
 
-- name: libsemanage-python package
+- name: python3-libsemanage package
   yum:
-    name: libsemanage-python
+    name: python3-libsemanage
     state: present
 
 - name: git package

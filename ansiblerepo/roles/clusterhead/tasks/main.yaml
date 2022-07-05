@@ -1,7 +1,7 @@
 ---
 - name: clustershell package
   yum:
-    name: "clustershell-ohpc"
+    name: "clustershell"
     state: present
 
 - name: clustershell config file

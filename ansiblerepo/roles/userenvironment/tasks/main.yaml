@@ -1,7 +1,7 @@
 ---
 - name: OpenHPC base package
   yum:
-    name: "@ohpc-base"
+    name: "ohpc-base"
     state: present
 
 - name: glibc-devel package
@@ -11,17 +11,17 @@
 
 - name: gnu compiler package
   yum:
-    name: "gnu-compilers-ohpc"
+    name: "gnu9-compilers-ohpc"
     state: present
 
 - name: gnu openmpi package
   yum:
-    name: "openmpi3-pmix-slurm-gnu7-ohpc"
+    name: "openmpi4-gnu9-ohpc"
     state: present
 
 - name: default environment package
   yum:
-    name: "lmod-defaults-gnu7-openmpi3-ohpc.noarch"
+    name: "lmod-defaults-gnu9-openmpi4-ohpc"
     state: present
 
 - name: openmpi mca config variables

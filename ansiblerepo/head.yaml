@@ -2,5 +2,6 @@
 - hosts: head
   roles:
     - common
+    - chrony
     - clusterhead
     - slurm

@@ -5,4 +5,4 @@
    - restart nfs
 
 - name: nfs service
-  service: name=nfs state=started enabled=yes
+  service: name=nfs-server state=started enabled=yes
