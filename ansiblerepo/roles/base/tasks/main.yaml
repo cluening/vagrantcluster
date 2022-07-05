@@ -1,25 +1,35 @@
 ---
-- name: modulefiles package
+- name: "Install the modulefiles package"
   dnf:
     name: "lmod-ohpc"
     state: present
 
-- name: mountain timezone
+- name: "Set the mountain timezone"
   timezone:
     name: America/Denver
 
-- name: python3-libsemanage package
+- name: "Install the python3-libsemanage package"
   dnf:
     name: python3-libsemanage
     state: present
 
-- name: git package
+- name: "Install the git package"
   dnf:
     name: "git"
     state: present
 
-- name: hosts file
-  copy: src=etc/hosts dest=/etc/hosts
+- name: "Install the hosts file"
+  copy:
+    src: etc/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
 
-- name: user namespace sysctl
-  copy: src=etc/sysctl.d/usernamespaces.conf dest=/etc/sysctl.d/usernamespaces.conf
+- name: "Install the user namespace sysctl"
+  copy:
+    src: etc/sysctl.d/usernamespaces.conf
+    dest: /etc/sysctl.d/usernamespaces.conf
+    owner: root
+    group: root
+    mode: 0644
