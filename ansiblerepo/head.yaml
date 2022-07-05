@@ -1,7 +1,7 @@
 ---
 - hosts: head
   roles:
-    - common
+    - base
     - ssh
     - chrony
     - clusterhead
