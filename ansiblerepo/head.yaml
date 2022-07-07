@@ -6,6 +6,7 @@
     - slurm
     - containerregistry
     - nfs-server
+    - nginx
 #    - common
 #    - clusterhead
 #    - slurm
