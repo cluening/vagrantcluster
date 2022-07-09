@@ -7,3 +7,5 @@ netconfig:
 
 compute_os_name: "centos"
 compute_os_version: "7.6.1810"
+
+enable_layercake_client: true

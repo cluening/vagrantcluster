@@ -1,0 +1,30 @@
+---
+
+- name: "Install the butane package"
+  ansible.builtin.dnf:
+    name: butane
+    state: present
+
+# We need a munge.key symlink in butane's files directory so that we don't
+# need to copy a real copy of the key there
+- name: "Create munge key symlink"
+  file:
+    src: /etc/munge/munge.key
+    dest: /etc/layercake/munge.key
+    owner: munge
+    group: munge
+    state: link
+
+- name: "Install common butane config"
+  ansible.builtin.template:
+    src: config-common.bu.j2
+    dest: /etc/layercake/config-common.bu
+    owner: root
+    group: root
+    mode: 0644
+  register: install_butane_config
+
+- name: "Compile the common butane config"
+  ansible.builtin.command: butane --pretty --strict --files-dir /etc/layercake --output /usr/share/nginx/html/ignition/config-common.ign /etc/layercake/config-common.bu
+  when:
+   - install_butane_config.changed

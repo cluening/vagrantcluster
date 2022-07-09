@@ -5,3 +5,5 @@ netconfig:
     ipv4_address: '{{ global_netconfig["cvlan"]["network"] | ansible.utils.nthhost(2) }}'
 
 cluster_image_directory: "/images"
+
+enable_layercake_server: true

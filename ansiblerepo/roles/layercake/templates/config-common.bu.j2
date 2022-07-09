@@ -1,0 +1,112 @@
+variant: fcos
+version: 1.4.0
+passwd:
+  users:
+    - name: core
+      # Vagrant default key
+      ssh_authorized_keys:
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"
+storage:
+  directories:
+    - path: /etc/layercake
+    - path: /var/layercakepodspool
+    - path: /var/home/vagrant
+
+  files:
+    - path: /etc/layercake/munge.key
+      mode: 0400
+      contents:
+        local: munge.key
+
+    - path: /etc/containers/registries.conf
+      overwrite: false
+      append:
+        - inline: |
+            [[registry]]
+            location = "head:5000"
+            insecure = true
+
+    - path: /etc/hosts
+      overwrite: false
+      append:
+        - inline: |
+            192.168.56.2    head slurm
+
+
+systemd:
+  units:
+    - name: podman.service
+      enabled: true
+
+    - name: podman.socket
+      enabled: true
+
+    - name: var-home-vagrant.mount
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Mount /home/vagrant
+        Wants=network-online.target
+        After=network-online.target
+
+        [Mount]
+        What=head:/home/vagrant
+        Where=/var/home/vagrant
+        Type=nfs4
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: layercake-network.service
+      enabled: true
+      contents: |
+        [Unit]
+        Before=systemd-user-sessions.service
+        Wants=first-boot-complete.target
+        ConditionFirstBoot=true
+
+        [Service]
+        Type=oneshot
+        ExecStart=podman network create -d macvlan -o parent=ens6 --subnet 192.168.56.0/24 cvlan
+        RemainAfterExit=yes
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: layercake.service
+      enabled: true
+      contents: |
+        {{ lookup('template', 'templates/layercake.service.j2') | indent(8, False) }}
+
+    - name: layercake-mungekey.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Create the munge key secret
+        After=network-online.target
+        ConditionPathExists=!/etc/layercake/mungekeycreated
+
+        [Service]
+        Type=oneshot
+        ExecStart=podman secret create mungekey /etc/layercake/munge.key
+        ExecStart=touch /etc/layercake/mungekeycreated
+        RemainAfterExit=true
+        StandardOutput=journal
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: layercake-pod.service
+      enabled: true
+      contents: |
+        {{ lookup('template', 'templates/layercake-pod.service.j2') | indent(8, False) }}
+
+    - name: layercake-munged.service
+      enabled: true
+      contents: |
+        {{ lookup('template', 'templates/layercake-munged.service.j2') | indent(8, False) }}
+
+    - name: layercake-slurmd.service
+      enabled: true
+      contents: |
+        {{ lookup('template', 'templates/layercake-slurmd.service.j2') | indent(8, False) }}

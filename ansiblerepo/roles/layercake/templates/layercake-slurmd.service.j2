@@ -25,11 +25,11 @@ ExecStart=/usr/bin/podman run \
 	--privileged \
 	--pod layercake \
 	--name slurmd \
-	-v /tmp/layercakepodtmp:/tmp \
-	-v /run/layercake/munge:/run/munge \
-	-v /var/layercakepodspool:/var/spool \
-	-v /run/layercake:/run/layercake \
-	-v /run/podman/podman.sock:/run/layercake/podman.sock \
+	-v /tmp/layercakepodtmp:/tmp:z \
+	-v /run/layercake/munge:/run/munge:z \
+	-v /var/layercakepodspool:/var/spool:z \
+	-v /run/layercake:/run/layercake:z \
+	-v /run/podman/podman.sock:/run/layercake/podman.sock:z \
 	-v /home:/home \
 	head:5000/slurmd
 ExecStop=/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
