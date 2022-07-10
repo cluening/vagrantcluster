@@ -1,0 +1,31 @@
+variant: fcos
+version: 1.4.0
+storage:
+  files:
+    - path: "/etc/sysconfig/layercake"
+      mode: 0644
+      contents:
+        inline: |
+          LAYERCAKE_HOSTNAME=lc{{ '%02d' | format(hostvars[item]["compute_node_number"]) }}
+          LAYERCAKE_IPV4_ADDR={{ hostvars[item]["netconfig"]["cvlan"]["pod_ipv4_address"] }}
+    - path: "/etc/NetworkManager/system-connections/Wired connection 2.nmconnection"
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=Wired connection 2
+          type=ethernet
+          autoconnect-priority=-999
+          interface-name=ens6
+
+          [ethernet]
+
+          [ipv4]
+          address1={{ hostvars[item]["netconfig"]["cvlan"]["ipv4_address"] }}/24
+          method=manual
+
+          [ipv6]
+          addr-gen-mode=stable-privacy
+          method=auto
+
+          [proxy]

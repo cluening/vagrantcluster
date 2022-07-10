@@ -22,9 +22,33 @@
     owner: root
     group: root
     mode: 0644
-  register: install_butane_config
+  register: install_butane_common_config
 
 - name: "Compile the common butane config"
   ansible.builtin.command: butane --pretty --strict --files-dir /etc/layercake --output /usr/share/nginx/html/ignition/config-common.ign /etc/layercake/config-common.bu
   when:
-   - install_butane_config.changed
+   - install_butane_common_config.changed
+
+- name: "Install host-specific butane configs"
+  ansible.builtin.template:
+    src: config-host-specific.bu.j2
+    dest: /etc/layercake/config-{{ item }}.bu
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - node01
+    - node02
+    - node03
+    - node04
+  register: install_butane_specific_config
+
+- name: "Compile the host-specific butane configs"
+  ansible.builtin.command: butane --pretty --strict --files-dir /etc/layercake --output /usr/share/nginx/html/ignition/config-{{ item }}.ign /etc/layercake/config-{{ item }}.bu
+  loop:
+    - node01
+    - node02
+    - node03
+    - node04
+  when:
+   - install_butane_specific_config.changed
