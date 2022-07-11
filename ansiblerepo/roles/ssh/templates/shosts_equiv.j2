@@ -1,0 +1,5 @@
+# Systems we want to allow passwordless USER access from
+
+{% for host in ssh_shosts_equiv %}
+{{ host }}
+{% endfor %}

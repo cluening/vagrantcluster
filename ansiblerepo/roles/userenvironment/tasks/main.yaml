@@ -1,30 +1,18 @@
 ---
-- name: OpenHPC base package
-  yum:
-    name: "@ohpc-base"
+- name: "Install user environment packages"
+  dnf:
+    name:
+     - "ohpc-base"
+     - "glibc-devel"
+     - "gnu9-compilers-ohpc"
+     - "openmpi4-gnu9-ohpc"
+     - "lmod-defaults-gnu9-openmpi4-ohpc"
     state: present
 
-- name: glibc-devel package
-  yum:
-    name: "glibc-devel"
-    state: present
-
-- name: gnu compiler package
-  yum:
-    name: "gnu-compilers-ohpc"
-    state: present
-
-- name: gnu openmpi package
-  yum:
-    name: "openmpi3-pmix-slurm-gnu7-ohpc"
-    state: present
-
-- name: default environment package
-  yum:
-    name: "lmod-defaults-gnu7-openmpi3-ohpc.noarch"
-    state: present
-
-- name: openmpi mca config variables
-  copy: src=etc/profile.d/openmpimca.sh dest=/etc/profile.d/openmpimca.sh owner=root group=root mode=0644
-  when: "('compute' in group_names) or
-         ( 'fe' in group_names)"
+- name: "Install openmpi mca config variables"
+  copy:
+    src: openmpimca.sh
+    dest: /etc/profile.d/openmpimca.sh
+    owner: root
+    group: root
+    mode: 0644

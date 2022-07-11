@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "fe1" do |fe1|
-    fe1.vm.box = "centos/7"
+    fe1.vm.box = "bento/centos-stream-8"
     fe1.vm.hostname = "fe1"
     fe1.vm.network :private_network, ip: "192.168.56.3"
   end

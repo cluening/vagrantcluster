@@ -1,0 +1,36 @@
+{% if enable_chrony_server | bool %}
+# Use public servers from the pool.ntp.org project.
+# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+pool 2.centos.pool.ntp.org iburst
+
+# Serve time to the rest of the cluster
+# FIXME: should use templating like below
+# allow { { global_netconfig["network"] } }
+allow 192.168.56.0
+{% endif %}
+{% if enable_chrony_client | bool %}
+# Get time from the head node
+server head
+{% endif %}
+
+# Record the rate at which the system clock gains/losses time.
+driftfile /var/lib/chrony/drift
+
+# Allow the system clock to be stepped in the first three updates
+# if its offset is larger than 1 second.
+makestep 1.0 3
+
+# Enable kernel synchronization of the real-time clock (RTC).
+rtcsync
+
+# Specify file containing keys for NTP authentication.
+keyfile /etc/chrony.keys
+
+# Get TAI-UTC offset and leap seconds from the system tz database.
+leapsectz right/UTC
+
+# Specify directory for log files.
+logdir /var/log/chrony
+
+# Select which information is logged.
+#log measurements statistics tracking

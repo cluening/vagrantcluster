@@ -1,0 +1,2 @@
+enable_chrony_server: False
+enable_chrony_client: True

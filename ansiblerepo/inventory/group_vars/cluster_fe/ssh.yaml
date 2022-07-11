@@ -1,0 +1,7 @@
+ssh_root_shosts:
+ - head
+ - 192.168.56.2
+
+ssh_shosts_equiv:
+ - head
+ - 192.168.56.2

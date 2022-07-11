@@ -1,0 +1,10 @@
+{% for known_host in ssh_known_hosts %}
+# {{ known_host.comment | default(known_host["host"]) }}
+{# Generate an ssh_known_hosts line                                         #}
+{# Join the hostname (known_host.host) and its aliases (known_host.aliases) #}
+{# with a comma and add the host's RSA key to the end by looking up the     #}
+{# host's ssh_host_rsa_key_pub variable                                     #}
+{% for key in hostvars[known_host.host]["ssh_keys"] %}
+{{ [known_host.host] | union(known_host.aliases) | join(',') }} {{ hostvars[known_host.host]['ssh_keys'][key]['public'] }}
+{% endfor %}
+{% endfor %}

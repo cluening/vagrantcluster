@@ -5,11 +5,24 @@
       - podman
     state: present
 
+- name: "Set the mountain timezone"
+  timezone:
+    name: America/Denver
+
+- name: "Install the python3-libsemanage package"
+  dnf:
+    name: python3-libsemanage
+    state: present
+
 - name: "Disable selinux"
   selinux:
     state: "disabled"
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: "Install the git package"
+  dnf:
+    name: "git"
+    state: present
 
 # FIXME: the IP address below should come from the head node's hostvars
 - name: Add head node aliases to /etc/hosts

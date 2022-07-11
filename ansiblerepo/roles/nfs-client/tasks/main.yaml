@@ -3,14 +3,14 @@
     name: nfs-utils
     state: present
 
-- name: home mount
+- name: "Mount home directories"
   ansible.posix.mount:
     name: /home/vagrant
     src: head:/home/vagrant
     fstype: nfs4
     state: mounted
 
-# - name: seboolean nfs home dirs
+# - name: "Set seboolean config on nfs home dirs"
 #   seboolean:
 #     name: use_nfs_home_dirs
 #     state: yes

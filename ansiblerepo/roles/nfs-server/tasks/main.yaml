@@ -4,13 +4,15 @@
     name: nfs-utils
     state: present
 
-- name: exports file
-  copy: src=etc/exports dest=/etc/exports
+- name: "Install exports file"
+  copy:
+    src: etc/exports
+    dest: /etc/exports
   notify:
    - restart nfs
 
-- name: nfs service
-  service: 
+- name: "Enable nfs service"
+  service:
     name: nfs-server
     state: started
     enabled: yes

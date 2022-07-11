@@ -6,6 +6,22 @@
       - slurm-slurmctld
       - slurm-devel
     state: present
+<<<<<<< HEAD
+=======
+  when: "('cluster_compute' in group_names) or
+         ('cluster_fe' in group_names)"
+
+- name: Slurm Server Packages
+  yum:
+    name: "ohpc-slurm-server"
+    state: present
+  when: "'cluster_head' in group_names"
+
+- name: slurm user
+  user:
+    name: slurm
+    system: yes
+>>>>>>> main
 
 - name: Slurm config directory
   file: state=directory path=/etc/slurm mode=0755

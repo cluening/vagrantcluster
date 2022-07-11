@@ -1,13 +1,15 @@
 ---
-- name: clustershell package
-  yum:
-    name: "clustershell-ohpc"
+- name: "Install the clustershell package"
+  dnf:
+    name: "clustershell"
     state: present
 
-- name: clustershell config file
-  copy: src=etc/clustershell/groups.d/local.cfg dest=/etc/clustershell/groups.d/local.cfg
+- name: "Install the clustershell config file"
+  copy:
+    src: local.cfg
+    dest: /etc/clustershell/groups.d/local.cfg
 
-- name: pdsh package
-  yum:
+- name: "Install the pdsh package"
+  dnf:
     name: "pdsh"
     state: present

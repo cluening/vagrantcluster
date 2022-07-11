@@ -1,0 +1,11 @@
+---
+- hosts: headnodes
+  roles:
+    - base
+    - networking
+    - slurm
+    - containerregistry
+    - nfs-server
+    - nginx
+    - layercake
+#    - clusterhead

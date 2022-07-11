@@ -1,0 +1,3 @@
+cluster_image_directory: "/images"
+enable_chrony_server: true
+enable_chrony_client: false
