@@ -1,6 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+#layercake_clustertype = "fedora"
+layercake_clustertype = "coreos"
+
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -51,14 +54,22 @@ Vagrant.configure("2") do |config|
     node03.vm.network :private_network, ip: "192.168.56.103"
     node03.vm.provider :libvirt do |lv|
       lv.qemuargs :value => '-fw_cfg'
-      lv.qemuargs :value => "name=opt/com.coreos/config,file=/tmp/config.ign"
+      lv.qemuargs :value => "name=opt/com.coreos/config,file=/tmp/config-bootstrap-node03.ign"
     end
   end
 
   config.vm.define "node04" do |node04|
-    node04.vm.box = "fedora/36-cloud-base"
     node04.vm.hostname = "node04"
     node04.vm.network :private_network, ip: "192.168.56.104"
+    if layercake_clustertype == "fedora"
+      node04.vm.box = "fedora/36-cloud-base"
+    elsif layercake_clustertype == "coreos"
+      node04.vm.box = "fedora-coreos"
+      node04.vm.provider :libvirt do |lv|
+        lv.qemuargs :value => '-fw_cfg'
+        lv.qemuargs :value => "name=opt/com.coreos/config,file=/tmp/config-bootstrap-node04.ign"
+      end
+    end
   end
 
   # Disable automatic box update checking. If you disable this, then
@@ -121,14 +132,15 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
 
-#  config.vm.provision "shell", inline: <<-SHELL
-#    if [ -f /vagrant/localenv.sh ]; then
-#      . /vagrant/localenv.sh
-#    fi
-#    yum install -y https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm
-#    yum install -y ansible
-#
-#    ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
-#  SHELL
+  if layercake_clustertype == "fedora"
+    config.vm.provision "shell", inline: <<-SHELL
+      if [ -f /vagrant/localenv.sh ]; then
+        . /vagrant/localenv.sh
+      fi
+      yum install -y ansible python3-netaddr python3-jmespath
+      
+      ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
+    SHELL
+  end
 
 end

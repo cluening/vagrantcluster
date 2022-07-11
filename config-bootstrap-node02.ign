@@ -1,0 +1,15 @@
+{
+  "ignition": {
+    "config": {
+      "merge": [
+        {
+          "source": "http://192.168.56.2/ignition/config-common.ign"
+        },
+        {
+          "source": "http://192.168.56.2/ignition/config-node02.ign"
+        }
+      ]
+    },
+    "version": "3.3.0"
+  }
+}
