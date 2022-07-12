@@ -1,8 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-#layercake_clustertype = "fedora"
-layercake_clustertype = "coreos"
+layercake_clustertype = "fedora"
+#layercake_clustertype = "coreos"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -137,7 +137,7 @@ Vagrant.configure("2") do |config|
       if [ -f /vagrant/localenv.sh ]; then
         . /vagrant/localenv.sh
       fi
-      yum install -y ansible python3-netaddr python3-jmespath
+      dnf install -y ansible python3-netaddr python3-jmespath
       
       ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l `hostname` /vagrant/ansiblerepo/site.yaml
     SHELL
