@@ -1,5 +1,5 @@
 ---
-- hosts: headnodes
+- hosts: cluster_head
   roles:
     - base
     - networking

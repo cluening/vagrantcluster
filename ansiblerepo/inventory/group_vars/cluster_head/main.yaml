@@ -1,3 +1,9 @@
-cluster_image_directory: "/images"
+netconfig:
+  cvlan:
+    conn_name: '{{ global_netconfig["cvlan"]["conn_name"] }}'
+    device: '{{ global_netconfig["cvlan"]["device"] }}'
+    ipv4_address: '{{ global_netconfig["cvlan"]["network"] | ansible.utils.nthhost(2) }}'
+
+enable_layercake_server: true
 enable_chrony_server: true
 enable_chrony_client: false
