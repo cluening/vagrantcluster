@@ -1,19 +1,19 @@
 ssh_known_hosts:
  - host: "head"
    aliases:
-     - "192.168.56.2"
+    - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - host: "fe1"
    aliases:
-    - "192.168.56.3"
+    - '{{ hostvars["fe1"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - host: "node01"
    aliases:
-    - "192.168.56.101"
+    - '{{ hostvars["node01"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - host: "node02"
    aliases:
-    - "192.168.56.102"
+    - '{{ hostvars["node02"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - host: "node03"
    aliases:
-    - "192.168.56.103"
+    - '{{ hostvars["node03"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - host: "node04"
    aliases:
-    - "192.168.56.104"
+    - '{{ hostvars["node04"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'

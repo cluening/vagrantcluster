@@ -1,0 +1,8 @@
+---
+global_network_config:
+  networks:
+    cvlan:
+      network: 192.168.56.0/24
+      netmask: 255.255.248.0
+      fe_offset: 2
+      compute_offset: 100

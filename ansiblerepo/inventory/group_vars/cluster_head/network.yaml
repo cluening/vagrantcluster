@@ -1,0 +1,8 @@
+---
+network_config:
+  interfaces:
+    eth1:
+      fqdn: head
+      network: cvlan
+      ipv4_address: "{{ global_network_config['networks']['cvlan']['network'] | ansible.utils.nthhost(2) }}"
+      netmask: "{{ global_network_config['networks']['cvlan']['netmask'] }}"
