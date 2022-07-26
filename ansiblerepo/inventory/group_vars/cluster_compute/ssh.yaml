@@ -1,17 +1,17 @@
 ssh_root_shosts:
  - head
- - 192.168.56.2
+ - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
 
 ssh_shosts_equiv:
  - head
- - 192.168.56.2
+ - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - fe1
- - 192.168.56.3
+ - '{{ hostvars["fe1"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - node01
- - 192.168.56.101
+ - '{{ hostvars["node01"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - node02
- - 192.168.56.102
+ - '{{ hostvars["node02"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - node03
- - 192.168.56.103
+ - '{{ hostvars["node03"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
  - node04
- - 192.168.56.104
+ - '{{ hostvars["node04"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'

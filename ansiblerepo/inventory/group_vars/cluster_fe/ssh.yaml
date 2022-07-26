@@ -1,7 +1,7 @@
 ssh_root_shosts:
  - head
- - 192.168.56.2
+ - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
 
 ssh_shosts_equiv:
  - head
- - 192.168.56.2
+ - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
