@@ -1,33 +1,33 @@
 ---
 - name: "Install the modulefiles package"
-  dnf:
+  ansible.builtin.dnf:
     name: "lmod-ohpc"
     state: present
 
 - name: "Set the mountain timezone"
-  timezone:
+  ansible.builtin.timezone:
     name: America/Denver
 
 - name: "Install the python3-libsemanage package"
-  dnf:
+  ansible.builtin.dnf:
     name: python3-libsemanage
     state: present
 
 - name: "Install the git package"
-  dnf:
+  ansible.builtin.dnf:
     name: "git"
     state: present
 
 - name: "Install the hosts file"
-  copy:
-    src: etc/hosts
+  ansible.builtin.template:
+    src: hosts.j2
     dest: /etc/hosts
     owner: root
     group: root
     mode: 0644
 
 - name: "Install the user namespace sysctl"
-  copy:
+  ansible.builtin.copy:
     src: etc/sysctl.d/usernamespaces.conf
     dest: /etc/sysctl.d/usernamespaces.conf
     owner: root
