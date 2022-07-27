@@ -4,9 +4,7 @@
 pool 2.centos.pool.ntp.org iburst
 
 # Serve time to the rest of the cluster
-# FIXME: should use templating like below
-# allow { { global_netconfig["network"] } }
-allow 192.168.56.0
+allow {{ global_network_config["networks"]["cvlan"]["network"] }}
 {% endif %}
 {% if enable_chrony_client | bool %}
 # Get time from the head node
