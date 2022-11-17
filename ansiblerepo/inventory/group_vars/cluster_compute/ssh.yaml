@@ -1,17 +1,17 @@
 ssh_root_shosts:
  - head
- - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+ - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
 
 ssh_shosts_equiv:
  - head
- - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+ - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - fe1
- - '{{ hostvars["fe1"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+ - '{{ hostvars["fe1"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - node01
- - '{{ hostvars["node01"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+ - '{{ hostvars["node01"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - node02
- - '{{ hostvars["node02"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+ - '{{ hostvars["node02"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - node03
- - '{{ hostvars["node03"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+ - '{{ hostvars["node03"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - node04
- - '{{ hostvars["node04"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+ - '{{ hostvars["node04"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'

@@ -1,19 +1,19 @@
 ssh_known_hosts:
  - host: "head"
    aliases:
-    - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+    - '{{ hostvars["head"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - host: "fe1"
    aliases:
-    - '{{ hostvars["fe1"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+    - '{{ hostvars["fe1"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - host: "node01"
    aliases:
-    - '{{ hostvars["node01"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+    - '{{ hostvars["node01"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - host: "node02"
    aliases:
-    - '{{ hostvars["node02"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+    - '{{ hostvars["node02"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - host: "node03"
    aliases:
-    - '{{ hostvars["node03"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+    - '{{ hostvars["node03"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'
  - host: "node04"
    aliases:
-    - '{{ hostvars["node04"]["network_config"]["interfaces"]["eth1"]["ipv4_address"] }}'
+    - '{{ hostvars["node04"]["network_config"]["interfaces"]["eth1"]["ipv6_address"] }}'

@@ -2,6 +2,7 @@
 - hosts: cluster_head
   roles:
     - base
+    - network
     - ssh
     - chrony
     - clusterhead

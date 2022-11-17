@@ -2,6 +2,7 @@
 - hosts: cluster_compute
   roles:
     - base
+    - network
     - ssh
     - chrony
     - slurm

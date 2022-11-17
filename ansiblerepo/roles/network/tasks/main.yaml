@@ -1,0 +1,14 @@
+---
+- name: "Add private network config"
+  community.general.nmcli:
+    conn_name: "Wired connection 1"
+    ifname: eth1
+    type: ethernet
+    method4: disabled
+      #ip6: "fd10:84f5:fa50::3/64"
+    ip6: "{{ network_config['interfaces']['eth1']['ipv6_address'] }}/{{ network_config['interfaces']['eth1']['prefix_bits'] }}"
+    state: present
+  notify: "Restart NetworkManager"
+
+- name: "Flush handlers"
+  meta: flush_handlers

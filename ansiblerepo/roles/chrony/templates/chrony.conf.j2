@@ -4,7 +4,7 @@
 pool 2.centos.pool.ntp.org iburst
 
 # Serve time to the rest of the cluster
-allow {{ global_network_config["networks"]["cvlan"]["network"] }}
+allow {{ global_network_config["networks"]["cvlan"]["ipv6_network"] }}
 {% endif %}
 {% if enable_chrony_client | bool %}
 # Get time from the head node
