@@ -23,37 +23,37 @@ Vagrant.configure("2") do |config|
   config.vm.define "head" do |head|
     head.vm.box = "bento/centos-stream-8"
     head.vm.hostname = "head"
-    head.vm.network :private_network, ip: "fd10:84f5:fa50::2", auto_config: false
+    head.vm.network :private_network, ip: "fd10:84f5:fa50::2", auto_config: false, name: "vboxnet3"
   end
 
   config.vm.define "fe1" do |fe1|
     fe1.vm.box = "bento/centos-stream-8"
     fe1.vm.hostname = "fe1"
-    fe1.vm.network :private_network, ip: "fd10:84f5:fa50::3", auto_config: false
+    fe1.vm.network :private_network, ip: "fd10:84f5:fa50::3", auto_config: false, name: "vboxnet3"
   end
 
   config.vm.define "node01" do |node01|
     node01.vm.box = "bento/centos-stream-8"
     node01.vm.hostname = "node01"
-    node01.vm.network :private_network, ip: "fd10:84f5:fa50::65", auto_config: false
+    node01.vm.network :private_network, ip: "fd10:84f5:fa50::65", auto_config: false, name: "vboxnet3"
   end
 
   config.vm.define "node02" do |node02|
     node02.vm.box = "bento/centos-stream-8"
     node02.vm.hostname = "node02"
-    node02.vm.network :private_network, ip: "fd10:84f5:fa50::66", auto_config: false
+    node02.vm.network :private_network, ip: "fd10:84f5:fa50::66", auto_config: false, name: "vboxnet3"
   end
 
   config.vm.define "node03" do |node03|
     node03.vm.box = "bento/centos-stream-8"
     node03.vm.hostname = "node03"
-    node03.vm.network :private_network, ip: "fd10:84f5:fa50::67", auto_config: false
+    node03.vm.network :private_network, ip: "fd10:84f5:fa50::67", auto_config: false, name: "vboxnet3"
   end
 
   config.vm.define "node04" do |node04|
     node04.vm.box = "bento/centos-stream-8"
     node04.vm.hostname = "node04"
-    node04.vm.network :private_network, ip: "fd10:84f5:fa50::68", auto_config: false
+    node04.vm.network :private_network, ip: "fd10:84f5:fa50::68", auto_config: false, name: "vboxnet3"
   end
 
   # Disable automatic box update checking. If you disable this, then
@@ -114,7 +114,7 @@ Vagrant.configure("2") do |config|
     fi
     dnf install -y http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm
     dnf config-manager --set-enabled powertools
-    dnf install -y ansible python38-netaddr
+    dnf install -y ansible python39-netaddr
 
     ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l $(hostname) /vagrant/ansiblerepo/site.yaml
   SHELL
