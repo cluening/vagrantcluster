@@ -114,7 +114,7 @@ Vagrant.configure("2") do |config|
     fi
     dnf install -y http://repos.openhpc.community/OpenHPC/2/CentOS_8/x86_64/ohpc-release-2-1.el8.x86_64.rpm
     dnf config-manager --set-enabled powertools
-    dnf install -y ansible python38-netaddr
+    dnf install -y ansible python39-netaddr
 
     ansible-playbook -c local -i /vagrant/ansiblerepo/inventory/hosts -l $(hostname) /vagrant/ansiblerepo/site.yaml
   SHELL
